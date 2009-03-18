@@ -1,10 +1,10 @@
-This project contains application templates for use when generating applications using Rails 2.3 or higher. E.g.,
+h1. About
 
+This project contains application templates for use when generating applications using Rails 2.3 or higher. The code was copied almost verbatim from Ryan Bates' "Railscast #148":http://railscasts.com/episodes/148-app-templates-in-rails-2-3 (which I heartily recommend for an introduction to application templates).
+
+h1. Usage
 <pre>
 <code>
   $ rails APP_NAME -m http://github.com/jparker/rails-templates/raw/master/base.rb
 </code>
 </pre>
-
-The layout was copied almost verbatim from Ryan Bates' "Railscast #148":http://railscasts.com/148 (which I heartily recommend for an introduction to application templates).
-
