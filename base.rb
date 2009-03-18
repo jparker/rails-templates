@@ -5,15 +5,16 @@
 
 run "echo TODO > README"
 
-if yes?('RSpec?')
+if yes?('Testing with RSpec?')
   plugin 'rspec', :git => 'git://github.com/dchelimsky/rspec.git'
   plugin 'rspec-rails', :git => 'git://github.com/dchelimsky/rspec-rails.git'
 end
 
 gem 'thoughtbot-shoulda', :lib => 'shoulda', :source => 'http://gems.github.com'
 gem 'thoughtbot-factory_girl', :lib => 'factory_girl', :source => 'http://gems.github.com'
-gem 'thoughtbot-quietbacktrace', :lib => 'quietbacktrace', :source => 'http://gems.github.com'
 gem 'rr'
+# TODO: add "include RR::Adapters::TestUnit" to test_helper.rb
+# TODO: add "require 'redgreen' unless ENV['TM_MODE']" to test_helper.rb
 
 gem 'haml'
 gem 'mislav-will_paginate', :lib => 'will_paginate', :source => 'http://gems.github.com'
