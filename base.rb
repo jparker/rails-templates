@@ -32,6 +32,8 @@ config/database.yml
 public/stylesheets/application.css
 END
 run 'touch tmp/.gitignore log/.gitignore'
+run 'mkdir -p public/stylesheets/sass'
+run 'touch public/stylesheets/sass/.gitignore'
 run 'cp config/database.yml config/example_database.yml'
 
 # TODO: Better to edit existing version rather than overwrite?
