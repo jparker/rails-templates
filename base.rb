@@ -13,8 +13,7 @@ end
 gem 'thoughtbot-shoulda', :lib => 'shoulda', :source => 'http://gems.github.com'
 gem 'thoughtbot-factory_girl', :lib => 'factory_girl', :source => 'http://gems.github.com'
 gem 'rr'
-# TODO: add "include RR::Adapters::TestUnit" to test_helper.rb
-# TODO: add "require 'redgreen' unless ENV['TM_MODE']" to test_helper.rb
+gem 'redgreen'
 
 gem 'haml'
 gem 'mislav-will_paginate', :lib => 'will_paginate', :source => 'http://gems.github.com'
@@ -34,5 +33,20 @@ public/stylesheets/application.css
 END
 run 'touch tmp/.gitignore log/.gitignore'
 run 'cp config/database.yml config/example_database.yml'
+
+# TODO: Better to edit existing version rather than overwrite?
+file 'test/test_helper.rb', <<-END
+ENV['RAILS_ENV'] = 'test'
+require File.expand_path(File.dirname(__FILE__) + '/../config/environment')
+require 'test_help'
+require 'redgreen' unless ENV['TM_MODE']
+
+class ActiveSupport::TestCase
+  self.use_transactional_fixtures = true
+  self.use_instantiated_fixtures = false
+  
+  include RR::Adapters::TestUnit
+end
+END
 
 git :add => '.', :commit => '-m "Initial import"'
