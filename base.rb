@@ -5,18 +5,29 @@
 
 run "echo TODO > README"
 
-if yes?('Testing with RSpec?')
-  plugin 'rspec', :git => 'git://github.com/dchelimsky/rspec.git'
-  plugin 'rspec-rails', :git => 'git://github.com/dchelimsky/rspec-rails.git'
-end
-
 gem 'thoughtbot-shoulda', :lib => 'shoulda', :source => 'http://gems.github.com'
 gem 'thoughtbot-factory_girl', :lib => 'factory_girl', :source => 'http://gems.github.com'
+gem 'webrat'
 gem 'rr'
 gem 'redgreen'
 
-gem 'haml'
 gem 'mislav-will_paginate', :lib => 'will_paginate', :source => 'http://gems.github.com'
+
+gem 'haml'
+run 'haml --rails .'
+
+gem 'newrelic_rpm'
+puts "Don't forget to install your newrelic config in config/newrelic.yml!"
+
+hoptoad_api_key = ask("What is your Hoptoad API key (leave blank to skip)?")
+unless hoptoad_api_key.blank?
+  plugin 'hoptoad_notifier', :git => 'git://github.com/thoughtbot/hoptoad_notifier.git'
+  initializer 'hoptoad.rb', <<-CODE
+HoptoadNotifier.configure do |config|
+  config.api_key = '#{hoptoad_api_key}'
+end
+  CODE
+end
 
 git :init
 
@@ -37,7 +48,7 @@ run 'touch public/stylesheets/sass/.gitignore'
 run 'cp config/database.yml config/example_database.yml'
 
 # TODO: Better to edit existing version rather than overwrite?
-file 'test/test_helper.rb', <<-END
+file 'test/test_helper.rb', <<-CODE
 ENV['RAILS_ENV'] = 'test'
 require File.expand_path(File.dirname(__FILE__) + '/../config/environment')
 require 'test_help'
@@ -49,6 +60,6 @@ class ActiveSupport::TestCase
   
   include RR::Adapters::TestUnit
 end
-END
+CODE
 
 git :add => '.', :commit => '-m "Initial import"'
