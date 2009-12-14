@@ -1,6 +1,6 @@
 h1. About
 
-This project contains application templates for use when generating applications using Rails 2.3 or higher. The code was copied almost verbatim from Ryan Bates' "Railscast #148":http://railscasts.com/episodes/148-app-templates-in-rails-2-3 (which I heartily recommend for an introduction to application templates).
+This project contains application templates for use when generating applications using Rails 2.3 or higher. The code was derived from Ryan Bates' "Railscast #148":http://railscasts.com/episodes/148-app-templates-in-rails-2-3 (which I heartily recommend for an introduction to application templates).
 
 h1. Usage
 
