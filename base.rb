@@ -4,16 +4,10 @@ run "echo TODO > README"
 
 gem 'faker'
 gem 'machinist'
-file 'spec/blueprints.rb', <<-END
-require 'machinist/active_record'
-require 'sham'
-Dir[File.expand_path(File.join(File.dirname(__FILE__), 'blueprints', '**', '*.rb'))].each {|f| require f}
-END
-run 'mkdir -p spec/blueprints'
-run 'touch spec/blueprints/.gitignore'
 gem 'rr'
 gem 'shoulda'
 gem 'webrat'
+gem 'pickle'
 gem 'cucumber'
 
 generate 'rspec'
@@ -23,6 +17,14 @@ spec_helper_contents = File.read('spec/spec_helper.rb')
 spec_helper_contents.sub!(/^(Spec::Runner\.configure)/, "require 'blueprints'\n\n\\1")
 spec_helper_contents.sub!(/# (config\.mock_with :rr)/, "\\1\n")
 file 'spec/spec_helper.rb', spec_helper_contents
+
+file 'spec/blueprints.rb', <<-END
+require 'machinist/active_record'
+require 'sham'
+Dir[File.expand_path(File.join(File.dirname(__FILE__), 'blueprints', '**', '*.rb'))].each {|f| require f}
+END
+run 'mkdir -p spec/blueprints'
+run 'touch spec/blueprints/.gitignore'
 
 gem 'newrelic_rpm'
 puts <<-END
