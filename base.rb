@@ -9,22 +9,34 @@ gem 'shoulda'
 gem 'webrat'
 gem 'pickle'
 gem 'cucumber'
+gem 'rspec-rails', :lib => false
+gem 'rspec', :lib => false
 
 generate 'rspec'
 generate 'cucumber'
+generate 'pickle'
 
 spec_helper_contents = File.read('spec/spec_helper.rb')
 spec_helper_contents.sub!(/^(Spec::Runner\.configure)/, "require 'blueprints'\n\n\\1")
 spec_helper_contents.sub!(/# (config\.mock_with :rr)/, "\\1\n")
+spec_helper_contents.sub!(/^end/, "\n  config.before(:all) { Sham.reset(:before_all) }\n  config.before(:each) { Sham.reset(:before_each) }\nend")
 file 'spec/spec_helper.rb', spec_helper_contents
 
 file 'spec/blueprints.rb', <<-END
 require 'machinist/active_record'
 require 'sham'
+require 'faker'
 Dir[File.expand_path(File.join(File.dirname(__FILE__), 'blueprints', '**', '*.rb'))].each {|f| require f}
 END
 run 'mkdir -p spec/blueprints'
 run 'touch spec/blueprints/.gitignore'
+
+env_contents = File.read('features/support/env.rb')
+env_contents << <<-END
+require "\#{Rails.root}/spec/blueprints"
+Before { Sham.reset }
+END
+file 'features/support/env.rb', env_contents
 
 gem 'newrelic_rpm'
 puts <<-END
@@ -54,6 +66,26 @@ gem 'authlogic'
 
 plugin 'validation_reflection', :git => 'git://github.com/redinger/validation_reflection.git'
 plugin 'urgetopunt_helpers', :git => 'git://github.com/jparker/urgetopunt_helpers.git'
+
+generate 'formtastic'
+
+file 'app/views/layouts/application.html.haml', <<-END
+!!! Strict
+%html{html_attrs}
+  %head
+    %title= yield(:title) || "Untitled"
+    %meta{"http-equiv" => "Content-Type", :content => "text/html;charset=utf8"}
+    = stylesheet_link_tag 'formtastic', 'formtastic_changes', 'application'
+  %body
+    .container
+      #head
+        - flash.each do |name, msg|
+          = content_tag :div, msg, :id => 'flash', :class => name
+      #body
+        %h1= yield(:title)
+        = yield
+      #foot
+END
 
 file '.gitignore', <<-END
 .DS_Store
