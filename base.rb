@@ -4,7 +4,7 @@ run "echo TODO > README"
 
 gem 'faker'
 gem 'machinist'
-gem 'rr'
+gem 'mocha'
 gem 'shoulda'
 gem 'webrat'
 gem 'pickle'
@@ -18,7 +18,7 @@ generate 'pickle'
 
 spec_helper_contents = File.read('spec/spec_helper.rb')
 spec_helper_contents.sub!(/^(Spec::Runner\.configure)/, "require 'blueprints'\n\n\\1")
-spec_helper_contents.sub!(/# (config\.mock_with :rr)/, "\\1\n")
+spec_helper_contents.sub!(/# (config\.mock_with :mocha)/, "\\1\n")
 spec_helper_contents.sub!(/^end/, "\n  config.before(:all) { Sham.reset(:before_all) }\n  config.before(:each) { Sham.reset(:before_each) }\nend")
 file 'spec/spec_helper.rb', spec_helper_contents
 
@@ -70,6 +70,7 @@ plugin 'urgetopunt_helpers', :git => 'git://github.com/jparker/urgetopunt_helper
 generate 'formtastic'
 
 file 'app/views/layouts/application.html.haml', <<-END
+!!! XML
 !!! Strict
 %html{html_attrs}
   %head
@@ -79,10 +80,10 @@ file 'app/views/layouts/application.html.haml', <<-END
   %body
     .container
       #head
+        %h1= yield(:title)
+      #body
         - flash.each do |name, msg|
           = content_tag :div, msg, :id => 'flash', :class => name
-      #body
-        %h1= yield(:title)
         = yield
       #foot
 END
