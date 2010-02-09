@@ -2,22 +2,22 @@
 
 run "echo TODO > README"
 
-gem 'faker'
-gem 'machinist'
-gem 'mocha'
-gem 'shoulda'
-gem 'webrat'
-gem 'pickle'
-gem 'cucumber'
-gem 'rspec-rails', :lib => false
-gem 'rspec', :lib => false
+gem 'rspec', :lib => false, :env => 'test'
+gem 'rspec-rails', :lib => false, :env => 'test'
+gem 'cucumber', :env => 'test'
+gem 'machinist', :env => 'test'
+gem 'shoulda', :env => 'test'
+gem 'mocha', :env => 'test'
+gem 'webrat', :env => 'test'
+gem 'pickle', :env => 'test'
+gem 'faker', :env => 'test'
 
 generate 'rspec'
 generate 'cucumber'
 generate 'pickle'
 
 spec_helper_contents = File.read('spec/spec_helper.rb')
-spec_helper_contents.sub!(/^(Spec::Runner\.configure)/, "require 'blueprints'\n\n\\1")
+spec_helper_contents.sub!(/^(Spec::Runner\.configure)/, "require 'blueprints'\nrequire 'authlogic/test_case'\n\n\\1")
 spec_helper_contents.sub!(/# (config\.mock_with :mocha)/, "\\1\n")
 spec_helper_contents.sub!(/^end/, "\n  config.before(:all) { Sham.reset(:before_all) }\n  config.before(:each) { Sham.reset(:before_each) }\nend")
 file 'spec/spec_helper.rb', spec_helper_contents
@@ -38,24 +38,21 @@ Before { Sham.reset }
 END
 file 'features/support/env.rb', env_contents
 
-gem 'newrelic_rpm'
-puts <<-END
+# gem 'newrelic_rpm'
+# puts <<-END
+# 
+#   ******************
+#   ***
+#   *** Install config from http://rpm.newrelic.com in config/newrelic.yml
+#   ***
+#   ******************
+# 
+# END
 
-  ******************
-  ***
-  *** Install config from http://rpm.newrelic.com in config/newrelic.yml
-  ***
-  ******************
-
-END
 hoptoad_api_key = ask("What is your Hoptoad API key (leave blank to skip)?")
 if hoptoad_api_key.present?
-  plugin 'hoptoad_notifier', :git => 'git://github.com/thoughtbot/hoptoad_notifier.git'
-  initializer 'hoptoad.rb', <<-END
-HoptoadNotifier.configure do |config|
-  config.api_key = '#{hoptoad_api_key}'
-end
-  END
+  gem 'hoptoad_notifier'
+  generate 'hoptoad', :api_key => hoptoad_api_key
 end
 
 gem 'will_paginate'
@@ -63,6 +60,21 @@ gem 'formtastic'
 gem 'haml'
 run 'haml --rails .'
 gem 'authlogic'
+
+rake 'gems:unpack'
+
+initializer 'sass.rb', <<-END
+if Rails.env.development?
+  Sass::Plugin.options[:always_update] = true
+  Sass::Plugin.options[:line_comments] = true
+  Sass::Plugin.options[:style] = :expanded
+else
+  Sass::Plugin.options[:style] = :compressed
+end
+END
+
+run 'mkdir -p spec/support/shoulda_macros'
+run 'cp vendor/gems/authlogic-*/shoulda_macros/authlogic.rb spec/support/shoulda_macros'
 
 plugin 'validation_reflection', :git => 'git://github.com/redinger/validation_reflection.git'
 plugin 'urgetopunt_helpers', :git => 'git://github.com/jparker/urgetopunt_helpers.git'
@@ -113,6 +125,6 @@ file 'config/environment.rb', environment_contents
 
 run 'curl -L http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js > public/javascripts/jquery.js'
 
-git :init
-git :add => '.'
-git :commit => '-m "Initial import"'
+# git :init
+# git :add => '.'
+# git :commit => '-m "Initial import"'
