@@ -16,11 +16,11 @@ generate 'rspec'
 generate 'cucumber'
 generate 'pickle'
 
-spec_helper_contents = File.read('spec/spec_helper.rb')
-spec_helper_contents.sub!(/^(Spec::Runner\.configure)/, "require 'blueprints'\nrequire 'authlogic/test_case'\n\n\\1")
-spec_helper_contents.sub!(/# (config\.mock_with :mocha)/, "\\1\n")
-spec_helper_contents.sub!(/^end/, "\n  config.before(:all) { Sham.reset(:before_all) }\n  config.before(:each) { Sham.reset(:before_each) }\nend")
-file 'spec/spec_helper.rb', spec_helper_contents
+contents = File.read('spec/spec_helper.rb')
+contents.sub!(/^(Spec::Runner\.configure)/, "require 'blueprints'\nrequire 'authlogic/test_case'\n\n\\1")
+contents.sub!(/# (config\.mock_with :mocha)/, "\\1\n")
+contents.sub!(/^end/, "\n  config.before(:all) { Sham.reset(:before_all) }\n  config.before(:each) { Sham.reset(:before_each) }\nend")
+file 'spec/spec_helper.rb', contents
 
 file 'spec/blueprints.rb', <<-END
 require 'machinist/active_record'
@@ -31,12 +31,16 @@ END
 run 'mkdir -p spec/blueprints'
 run 'touch spec/blueprints/.gitignore'
 
-env_contents = File.read('features/support/env.rb')
-env_contents << <<-END
+if File.exists?('features/support/env.rb')
+  contents = File.read('features/support/env.rb')
+else
+  contents = ''
+end
+contents << <<-END
 require "\#{Rails.root}/spec/blueprints"
 Before { Sham.reset }
 END
-file 'features/support/env.rb', env_contents
+file 'features/support/env.rb', contents
 
 # gem 'newrelic_rpm'
 # puts <<-END
@@ -119,9 +123,9 @@ run 'cp config/database.yml config/example_database.yml'
 run 'mkdir -p app/mailers app/observers spec/mailers spec/observers'
 
 extra_load_paths = %w[mailers observers].map { |path| "\#{RAILS_ROOT}/app/#{path}" }.join(' ')
-environment_contents = File.read('config/environment.rb')
-environment_contents.sub!(/# (config\.load_paths \+=) .*/, "\\1 %W( #{extra_load_paths} )")
-file 'config/environment.rb', environment_contents
+contents = File.read('config/environment.rb')
+contents.sub!(/# (config\.load_paths \+=) .*/, "\\1 %W( #{extra_load_paths} )")
+file 'config/environment.rb', contents
 
 run 'curl -L http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js > public/javascripts/jquery.js'
 
