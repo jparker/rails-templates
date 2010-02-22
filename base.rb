@@ -5,6 +5,7 @@ run "echo TODO > README"
 gem 'rspec', :lib => false, :env => 'test'
 gem 'rspec-rails', :lib => false, :env => 'test'
 gem 'cucumber', :env => 'test'
+gem 'cucumber-rails', :env => 'test'
 gem 'machinist', :env => 'test'
 gem 'shoulda', :env => 'test'
 gem 'mocha', :env => 'test'
@@ -66,6 +67,7 @@ run 'haml --rails .'
 gem 'authlogic'
 
 rake 'gems:unpack'
+rake 'gems:unpack', :env => 'test'
 
 initializer 'sass.rb', <<-END
 if Rails.env.development?
