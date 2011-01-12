@@ -1,5 +1,16 @@
-gem 'rspec-rails',    :group => [:test, :development], :version => '~> 2.3'
-gem 'rspec',          :group => :test, :version => '~> 2.3'
+# usage: rails new <app_name> -m base.rb [options]
+
+class Rails::Generators::AppGenerator
+  def todo(message)
+    puts message
+    File.open('TODO', 'a+') do |f|
+      f.puts "---\n#{message}\n"
+    end
+  end
+end
+
+gem 'rspec-rails',    :group => [:test, :development], :version => '~> 2.4'
+gem 'rspec',          :group => :test, :version => '~> 2.4'
 gem 'cucumber',       :group => :test
 gem 'cucumber-rails', :group => :test
 gem 'shoulda',        :group => :test
@@ -10,11 +21,11 @@ gem 'capybara', :version => '~> 0.3.9', :group => :test
 # gem 'webrat', :version => '0.7.2.beta.1', :group => :test
 
 gem 'will_paginate',       :version => '>= 3.0.pre2'
-gem 'formtastic',          :version => '~> 1.2.2'
+gem 'formtastic',          :version => '~> 1.2.3'
 gem 'inherited_resources', :version => '~> 1.1.2'
 gem 'haml',                :version => '~> 3.0.25'
 gem 'devise',              :version => '~> 1.1.5'
-gem 'hoptoad_notifier',    :version => '~> 2.3.12'
+gem 'hoptoad_notifier',    :version => '~> 2.4.2'
 
 gem 'rails3-generators', :group => :development
 gem 'haml-rails',        :group => :development
@@ -35,9 +46,7 @@ if hoptoad_api_key.present?
   generate 'hoptoad', '--api-key', hoptoad_api_key
   gsub_file 'config/initializers/hoptoad.rb', 'end', "  config.js_notifier = true\nend"
 else
-  puts '>>> Skipping hoptoad configuration for now'
-  puts '>>> To configure hoptoad run: rails g hoptoad --api-key HOPTOAD_API_KEY'
-  file 'TODO', "To install hoptoad:\n$ rails g hoptoad --api-key HOPTOAD_API_KEY\n"
+  todo "Skipping hoptoad configuration. To install hoptoad:\n$ rails g hoptoad --api-key HOPTOAD_API_KEY"
 end
 
 gsub_file 'spec/spec_helper.rb', 'config.mock_with :rspec', '# config.mock_with :rspec'
@@ -51,13 +60,15 @@ file 'app/views/layouts/application.html.haml', <<END
 !!! XML
 !!! 5
 %head
-  %title (untitled)
+  %title= yield :title
   = stylesheet_link_tag :all
   = csrf_meta_tag
 %body
+  %h1= yield :title
+
   #flash
-    %p.notice= notice
-    %p.error= error
+    %p.notice= flash[:notice]
+    %p.error= flash[:error]
 
   = yield
 
@@ -65,23 +76,53 @@ file 'app/views/layouts/application.html.haml', <<END
 END
 
 # TODO: move to urgetopunt_rails_helper gem
-lib 'migration_helper.rb', <<END
-module MigrationHelper
-  # add_foreign_key_constraint :items, :seller_id             # items.seller_id => sellers.id
-  # add_foregin_key_constraint :messages, :sender_id, :people # messages.sender_id => people.id
-  def add_foreign_key_constraint(table, column, reference_table = nil)
-    reference_table ||= column.to_s.sub(/_id$/, '').tableize
-    execute <<-END.squish
-      ALTER TABLE      \#{connection.quote_table_name table}
-      ADD FOREIGN KEY (\#{connection.quote_column_name column})
-      REFERENCES       \#{connection.quote_table_name reference_table}
-    END
+initializer 'urgetopunt.rb', <<END
+require 'urgetopunt/migration_helpers'
+END
+lib 'urgetopunt/migration_helpers.rb', <<END
+module Urgetopunt
+  module MigrationHelper
+    # add_foreign_key_constraint :items, :seller_id             # items.seller_id => sellers.id
+    # add_foregin_key_constraint :messages, :sender_id, :people # messages.sender_id => people.id
+    def add_foreign_key_constraint(table, column, reference_table = nil)
+      reference_table ||= column.to_s.sub(/_id$/, '').tableize
+      execute <<-END.squish
+        ALTER TABLE      \#{connection.quote_table_name table}
+        ADD FOREIGN KEY (\#{connection.quote_column_name column})
+        REFERENCES       \#{connection.quote_table_name reference_table}
+      END
+    end
   end
 end
+ActiveRecord::Migration.extend Urgetopunt::MigrationHelper
 END
-initializer 'extensions.rb', <<END
-require 'migration_helper'
-ActiveRecord::Migration.extend MigrationHelper
+
+remove_file 'app/helpers/application_helper.rb'
+file 'app/helpers/application_helper.rb', <<END
+module ApplicationHelper
+  def title(text)
+    content_for :title do
+      text
+    end
+  end
+
+  def google_analytics(app_id)
+    if Rails.env.production?
+      javascript_tag <<-END
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', \#{app_id}]);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+          var ga = document.createElement('script');
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          ga.setAttribute('async', 'true');
+          document.documentElement.firstChild.appendChild(ga);
+        })();
+      END
+    end
+  end
+end
 END
 
 # TODO:
