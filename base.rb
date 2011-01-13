@@ -2,17 +2,16 @@
 
 class Rails::Generators::AppGenerator
   def todo(message)
+    create_file 'TODO', '' unless File.exist?('TODO')
     puts message
-    File.open('TODO', 'a+') do |f|
-      f.puts "---\n#{message}\n"
-    end
+    append_file 'TODO', "---\n#{message}\n"
   end
 end
 
 gem 'rspec-rails',    :group => [:test, :development], :version => '~> 2.4'
 gem 'rspec',          :group => :test, :version => '~> 2.4'
-gem 'cucumber',       :group => :test
 gem 'cucumber-rails', :group => :test
+gem 'cucumber',       :group => :test
 gem 'shoulda',        :group => :test
 gem 'faker',          :group => [:test, :development]
 
@@ -44,7 +43,7 @@ gem 'factory_girl_rails', :group => :test
 hoptoad_api_key = ask('What is the Hoptoad API key for this project (leave blank to skip)?')
 if hoptoad_api_key.present?
   generate 'hoptoad', '--api-key', hoptoad_api_key
-  gsub_file 'config/initializers/hoptoad.rb', 'end', "  config.js_notifier = true\nend"
+  inject_into_file 'config/initializers/hoptoad.rb', "  config.js_notifier = true\n", :before => 'end'
 else
   todo "Skipping hoptoad configuration. To install hoptoad:\n$ rails g hoptoad --api-key HOPTOAD_API_KEY"
 end
@@ -91,15 +90,14 @@ module Urgetopunt
         ADD FOREIGN KEY (\#{connection.quote_column_name column})
         REFERENCES       \#{connection.quote_table_name reference_table}
       END
+      add_index table, column
     end
   end
 end
 ActiveRecord::Migration.extend Urgetopunt::MigrationHelper
 END
 
-remove_file 'app/helpers/application_helper.rb'
-file 'app/helpers/application_helper.rb', <<END
-module ApplicationHelper
+inject_into_file 'app/helpers/application_helper.rb', <<END, :after => "module ApplicationHelper\n"
   def title(text)
     content_for :title do
       text
@@ -122,8 +120,10 @@ module ApplicationHelper
       END
     end
   end
-end
 END
+
+gem 'fuubar', :group => :test
+append_file '.rspec', "--format Fuubar\n"
 
 # TODO:
 # gem 'newrelic_rpm'
