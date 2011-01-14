@@ -1,18 +1,19 @@
-# usage: rails new <app_name> -m base.rb [options]
+# usage: rails new <app_name> -m base.rb -T -J [options]
+# => include -T option to skip Test::Unit files (template uses RSpec)
+# => include -J option to skip Prototype files (template uses jQuery)
 
 class Rails::Generators::AppGenerator
-  def todo(message)
+  def todo(component, message)
+    say "\033[36m" + 'todo'.rjust(10) + "\033[0m    check TODO when configuring #{component}"
     create_file 'TODO', '' unless File.exist?('TODO')
-    puts message
     append_file 'TODO', "---\n#{message}\n"
   end
 end
 
 gem 'rspec-rails',    :group => [:test, :development], :version => '~> 2.4'
-gem 'rspec',          :group => :test, :version => '~> 2.4'
 gem 'cucumber-rails', :group => :test
-gem 'cucumber',       :group => :test
 gem 'shoulda',        :group => :test
+gem 'fuubar', :group => :test
 gem 'faker',          :group => [:test, :development]
 
 # Capybara 0.4 bugging out when following links (undefined method node...)
@@ -31,6 +32,7 @@ gem 'haml-rails',        :group => :development
 gem 'jquery-rails',      :group => :development
 
 generate 'rspec:install'
+append_file '.rspec', "--format Fuubar\n"
 generate 'cucumber:install', '--capybara'
 generate 'jquery:install'
 generate 'formtastic:install'
@@ -45,7 +47,7 @@ if hoptoad_api_key.present?
   generate 'hoptoad', '--api-key', hoptoad_api_key
   inject_into_file 'config/initializers/hoptoad.rb', "  config.js_notifier = true\n", :before => 'end'
 else
-  todo "Skipping hoptoad configuration. To install hoptoad:\n$ rails g hoptoad --api-key HOPTOAD_API_KEY"
+  todo 'hoptoad', "$ rails g hoptoad --api-key HOPTOAD_API_KEY"
 end
 
 gsub_file 'spec/spec_helper.rb', 'config.mock_with :rspec', '# config.mock_with :rspec'
@@ -122,8 +124,5 @@ inject_into_file 'app/helpers/application_helper.rb', <<END, :after => "module A
   end
 END
 
-gem 'fuubar', :group => :test
-append_file '.rspec', "--format Fuubar\n"
-
-# TODO:
-# gem 'newrelic_rpm'
+# TODO: gem 'newrelic_rpm'
+# TODO: run 'bundle install' (and delay actions that depend on gems)
