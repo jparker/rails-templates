@@ -25,39 +25,34 @@ gem 'formtastic',          :version => '~> 1.2.3'
 gem 'inherited_resources', :version => '~> 1.1.2'
 gem 'haml',                :version => '~> 3.0.25'
 gem 'devise',              :version => '~> 1.1.5'
+gem 'cancan',              :version => '~> 1.5.0'
 gem 'hoptoad_notifier',    :version => '~> 2.4.2'
+gem 'escape_utils',        :version => '~> 0.1.9'
 
 gem 'rails3-generators', :group => :development
 gem 'haml-rails',        :group => :development
 gem 'jquery-rails',      :group => :development
 
-generate 'rspec:install'
-append_file '.rspec', "--format Fuubar\n"
-generate 'cucumber:install', '--capybara'
-generate 'jquery:install'
-generate 'formtastic:install'
-generate 'devise:install'
-
 # gem 'machinist', :version => '>= 2.0.0.beta2', :group => :test
 # generate 'machinist:install'
 gem 'factory_girl_rails', :group => :test
 
-hoptoad_api_key = ask('What is the Hoptoad API key for this project (leave blank to skip)?')
-if hoptoad_api_key.present?
-  generate 'hoptoad', '--api-key', hoptoad_api_key
-  inject_into_file 'config/initializers/hoptoad.rb', "  config.js_notifier = true\n", :before => 'end'
-else
-  todo 'hoptoad', "$ rails g hoptoad --api-key HOPTOAD_API_KEY"
-end
+initializer 'rack_escape_utils.rb', <<RUBY
+# http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
+require 'escape_utils/html/rack'
+require 'escape_utils/html/haml'
 
-gsub_file 'spec/spec_helper.rb', 'config.mock_with :rspec', '# config.mock_with :rspec'
-# gem 'rr', :group => :test
-# gsub_file 'spec/spec_helper.rb', '# config.mock_with :rr', 'config.mock_with :rr'
-gem 'mocha', :group => :test
-gsub_file 'spec/spec_helper.rb', '# config.mock_with :mocha', 'config.mock_with :mocha'
+module Rack
+  module Utils
+    def escape(s)
+      EscapeUtils.escape_url(s)
+    end
+  end
+end
+RUBY
 
 remove_file 'app/views/layouts/application.html.erb'
-file 'app/views/layouts/application.html.haml', <<END
+file 'app/views/layouts/application.html.haml', <<RUBY
 !!! XML
 !!! 5
 %head
@@ -74,32 +69,9 @@ file 'app/views/layouts/application.html.haml', <<END
   = yield
 
   = javascript_include_tag :defaults
-END
+RUBY
 
-# TODO: move to urgetopunt_rails_helper gem
-initializer 'urgetopunt.rb', <<END
-require 'urgetopunt/migration_helpers'
-END
-lib 'urgetopunt/migration_helpers.rb', <<END
-module Urgetopunt
-  module MigrationHelper
-    # add_foreign_key_constraint :items, :seller_id             # items.seller_id => sellers.id
-    # add_foregin_key_constraint :messages, :sender_id, :people # messages.sender_id => people.id
-    def add_foreign_key_constraint(table, column, reference_table = nil)
-      reference_table ||= column.to_s.sub(/_id$/, '').tableize
-      execute <<-END.squish
-        ALTER TABLE      \#{connection.quote_table_name table}
-        ADD FOREIGN KEY (\#{connection.quote_column_name column})
-        REFERENCES       \#{connection.quote_table_name reference_table}
-      END
-      add_index table, column
-    end
-  end
-end
-ActiveRecord::Migration.extend Urgetopunt::MigrationHelper
-END
-
-inject_into_file 'app/helpers/application_helper.rb', <<END, :after => "module ApplicationHelper\n"
+inject_into_file 'app/helpers/application_helper.rb', <<RUBY, :after => "module ApplicationHelper\n"
   def title(text)
     content_for :title do
       text
@@ -122,7 +94,7 @@ inject_into_file 'app/helpers/application_helper.rb', <<END, :after => "module A
       END
     end
   end
-END
+RUBY
 
 # TODO: gem 'newrelic_rpm'
 # TODO: run 'bundle install' (and delay actions that depend on gems)
