@@ -10,15 +10,15 @@ class Rails::Generators::AppGenerator
   end
 end
 
-gem 'rspec-rails',    :group => [:test, :development], :version => '~> 2.4'
-gem 'cucumber-rails', :group => :test
-gem 'shoulda',        :group => :test
-gem 'fuubar', :group => :test
-gem 'faker',          :group => [:test, :development]
+gem 'rspec-rails',      :group => [:test, :development], :version => '~> 2.4'
+gem 'cucumber-rails',   :group => :test, :version => '~> 0.4.0.beta.1'
+gem 'database_cleaner', :group => :test
+gem 'shoulda',          :group => :test
+gem 'fuubar',           :group => :test
+gem 'faker',            :group => [:test, :development]
 
-# Capybara 0.4 bugging out when following links (undefined method node...)
-gem 'capybara', :version => '~> 0.3.9', :group => :test
-# gem 'webrat', :version => '0.7.2.beta.1', :group => :test
+gem 'capybara', :version => '~> 0.4.1', :group => :test
+# gem 'webrat', :version => '~> 0.7.2', :group => :test
 
 gem 'will_paginate',       :version => '>= 3.0.pre2'
 gem 'formtastic',          :version => '~> 1.2.3'

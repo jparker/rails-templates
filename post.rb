@@ -7,7 +7,8 @@ gsub_file 'spec/spec_helper.rb', '# config.mock_with :rr', 'config.mock_with :rr
 # gsub_file 'spec/spec_helper.rb', '# config.mock_with :mocha', 'config.mock_with :mocha'
 
 generate 'cucumber:install', '--capybara'
-append_file 'features/support/env.rb', "require 'factory_girl/step_definitions'\n"
+gsub_file 'features/support/env.rb', '# DatabaseCleaner.strategy', 'DatabaseCleaner.strategy'
+file 'features/support/factory_girl_steps.rb', "require 'factory_girl/step_definitions'\n"
 
 generate 'jquery:install'
 generate 'formtastic:install'
