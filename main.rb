@@ -20,7 +20,7 @@ gsub_file 'features/support/env.rb', '# DatabaseCleaner.strategy', 'DatabaseClea
 file 'features/support/factory_girl_steps.rb', "require 'factory_girl/step_definitions'\n"
 
 generate 'devise:install'
-inject_into_file 'spec/spec_helper.rb', "  config.include Devise::Helpers, :type => :controller\n", :after => 'RSpec.configure do |config|'
+inject_into_file 'spec/spec_helper.rb', "  config.include Devise::TestHelpers, :type => :controller\n", :after => 'RSpec.configure do |config|'
 todo 'cancan', '$ rails g cancan:ability'
 
 generate 'jquery:install'

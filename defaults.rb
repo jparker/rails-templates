@@ -31,3 +31,10 @@ module Rack
   end
 end
 RUBY
+
+append_file '.gitignore', <<GIT
+*.swp
+*~
+#*#
+.DS_Store
+GIT

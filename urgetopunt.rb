@@ -10,14 +10,20 @@ module Urgetopunt
     def add_foreign_key_constraint(table, column, options = {})
       ref_table = options[:ref_table] || column.to_s.sub(/_id$/, '').tableize
       ref_column = options[:ref_column] || :id
-      index = options.has_key?(:index) ? options[:index] : true
+      indexable = options.has_key?(:index) ? options[:index] : true
 
       execute <<-SQL.squish
         ALTER TABLE      \#{connection.quote_table_name table}
         ADD FOREIGN KEY (\#{connection.quote_column_name column})
         REFERENCES       \#{connection.quote_table_name ref_table}(\#{connection.quote_column_name ref_column})
       SQL
-      add_index table, column if index
+      add_index table, column if indexable
+    end
+
+    def remove_foreign_key_constraint(table, column, options = {})
+      indexable = options.has_key?(:index) ? options[:index] : true
+      remove_index table, column if indexable
+      execute "ALTER TABLE \#{connection.quote_table_name table} DROP CONSTRAINT \#{table}_\#{column}_fkey"
     end
   end
 end
@@ -47,24 +53,4 @@ inject_into_file 'app/helpers/application_helper.rb', <<RUBY, :after => "module 
       END
     end
   end
-RUBY
-
-remove_file 'app/views/layouts/application.html.erb'
-file 'app/views/layouts/application.html.haml', <<RUBY
-!!! XML
-!!! 5
-%head
-  %title= yield :title
-  = stylesheet_link_tag :all
-  = csrf_meta_tag
-%body
-  %h1= yield :title
-
-  #flash
-    %p.notice= flash[:notice]
-    %p.error= flash[:error]
-
-  = yield
-
-  = javascript_include_tag :defaults
 RUBY
