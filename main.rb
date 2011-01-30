@@ -13,7 +13,7 @@ apply File.join(File.dirname(__FILE__), 'urgetopunt.rb')
 generate 'rspec:install'
 append_file '.rspec', "--format Fuubar\n"
 gsub_file 'spec/spec_helper.rb', 'config.mock_with :rspec', '# config.mock_with :rspec'
-gsub_file 'spec/spec_helper.rb', '# config.mock_with :rr', 'config.mock_with :rr'
+gsub_file 'spec/spec_helper.rb', '# config.mock_with :mocha', 'config.mock_with :mocha'
 
 generate 'cucumber:install', '--capybara'
 gsub_file 'features/support/env.rb', '# DatabaseCleaner.strategy', 'DatabaseCleaner.strategy'

@@ -8,7 +8,7 @@ gem 'factory_girl_rails',   :version => '~> 1.0.1',         :group => [:test, :d
 gem 'factory_girl',         :version => '~> 1.3.3',         :group => [:test, :development]
 gem 'faker',                                                :group => [:test, :development]
 gem 'shoulda',              :version => '~> 2.11.3',        :group => :test
-gem 'rr',                   :version => '~> 1.0.2',         :group => :test
+gem 'mocha'                 :version => '~> 0.9.10',        :group => :test
 gem 'fuubar',                                               :group => :test
 
 gem 'will_paginate',        :version => '>= 3.0.pre2'
