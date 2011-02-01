@@ -9,13 +9,18 @@ gem 'factory_girl',         :version => '~> 1.3.3',         :group => [:test, :d
 gem 'faker',                                                :group => [:test, :development]
 gem 'shoulda',              :version => '~> 2.11.3',        :group => :test
 gem 'mocha'                 :version => '~> 0.9.10',        :group => :test
+# required for view testing in rspec -- capybara won't work
+gem 'webrat',               :version => '~> 0.7.3',         :group => :test
 gem 'fuubar',                                               :group => :test
+
+# http://groups.google.com/group/mail-ruby/browse_thread/thread/e93bbd05706478dd?pli=1
+gem 'mail',                 :version => '~> 2.2.15'
 
 gem 'will_paginate',        :version => '>= 3.0.pre2'
 gem 'formtastic',           :version => '~> 1.2.3'
 gem 'inherited_resources',  :version => '~> 1.1.2'
 gem 'haml',                 :version => '~> 3.0.25'
-gem 'devise',               :version => '~> 1.1.5'
+gem 'devise',               :version => '>= 1.2.rc'
 gem 'cancan',               :version => '~> 1.5.0'
 gem 'hoptoad_notifier',     :version => '~> 2.4.2'
 gem 'escape_utils',         :version => '~> 0.1.9'
