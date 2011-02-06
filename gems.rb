@@ -8,7 +8,7 @@ gem 'factory_girl_rails',   :version => '~> 1.0.1',         :group => [:test, :d
 gem 'factory_girl',         :version => '~> 1.3.3',         :group => [:test, :development]
 gem 'faker',                                                :group => [:test, :development]
 gem 'shoulda',              :version => '~> 2.11.3',        :group => :test
-gem 'mocha'                 :version => '~> 0.9.11',        :group => :test
+gem 'mocha',                :version => '~> 0.9.11',        :group => :test
 # required for view testing in rspec -- capybara won't work
 gem 'webrat',               :version => '~> 0.7.3',         :group => :test
 gem 'fuubar',                                               :group => :test
