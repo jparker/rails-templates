@@ -33,10 +33,3 @@ if hoptoad_api_key.present?
 else
   todo 'hoptoad', "$ rails g hoptoad --api-key HOPTOAD_API_KEY"
 end
-
-use_ssl = ask('Will this application require SSL?')
-if use_ssl.present? && use_ssl =~ /\Ay(es)?/i
-  gem 'rack-ssl', :version => '~> 1.2.0', :group => :production
-  prepend_file 'config/environments/production.rb', "require 'rack/ssl'\n\n"
-  inject_into_file 'config/environments/production.rb', "\n  config.middleware.insert_before ActionDispatch::Cookies, Rack::SSL\n", :after => '::Application.configure do'
-end

@@ -7,13 +7,17 @@ file 'app/views/layouts/application.html.haml', <<HAML
   = stylesheet_link_tag :all
   = csrf_meta_tag
 %body
-  %h1= yield :title
+  #head
+    %h1= yield :title
 
-  #flash
-    %p.notice= flash[:notice]
-    %p.error= flash[:error]
+  #main
+    #flash
+      - flash.each do |level, message|
+        %p{:class => level}= message
 
-  = yield
+    = yield
+
+  #foot
 
   = javascript_include_tag :defaults
 HAML
@@ -32,9 +36,18 @@ module Rack
 end
 RUBY
 
+use_ssl = ask('Will this application require SSL?')
+if use_ssl.present? && use_ssl =~ /\Ay(es)?/i
+  gem 'rack-ssl', :version => '~> 1.2.0', :group => :production
+  prepend_file 'config/environments/production.rb', "require 'rack/ssl'\n\n"
+  inject_into_file 'config/environments/production.rb', "\n  config.middleware.insert_before ActionDispatch::Cookies, Rack::SSL\n", :after => '::Application.configure do'
+end
+
 append_file '.gitignore', <<GIT
 *.swp
 *~
 #*#
 .DS_Store
 GIT
+
+file '.autotest', "require 'autotest/bundler'\n"
