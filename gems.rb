@@ -19,7 +19,7 @@ gem 'mail',                 :version => '~> 2.2.15'
 
 gem 'will_paginate',        :version => '>= 3.0.pre2'
 gem 'formtastic',           :version => '~> 1.2.3'
-gem 'inherited_resources',  :version => '~> 1.1.2'
+gem 'inherited_resources',  :version => '~> 1.2.1'
 gem 'haml',                 :version => '~> 3.0.25'
 gem 'devise',               :version => '>= 1.2.rc'
 gem 'cancan',               :version => '~> 1.5.0'
