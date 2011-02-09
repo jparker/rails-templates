@@ -1,6 +1,7 @@
 gem 'rspec-rails',          :version => '~> 2.4',           :group => [:test, :development]
 gem 'rspec',                :version => '~> 2.4',           :group => :test
 gem 'cucumber-rails',       :version => '~> 0.4.0.beta.1',  :group => [:test, :development]
+todo 'cucumber-rails', 'switch to HEAD (https://github.com/aslakhellesoy/cucumber-rails.git)'
 gem 'cucumber',             :version => '~> 0.10.0',        :group => :test
 gem 'capybara',             :version => '~> 0.4.1',         :group => :test
 gem 'database_cleaner',     :version => '~> 0.6.2',         :group => :test
