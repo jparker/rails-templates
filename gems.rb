@@ -13,6 +13,7 @@ gem 'mocha',                :version => '~> 0.9.11',        :group => :test
 # required for view testing in rspec -- capybara won't work
 gem 'webrat',               :version => '~> 0.7.3',         :group => :test
 gem 'fuubar',                                               :group => :test
+gem 'launchy',              :version => '~> 0.3.7',         :group => :test
 
 # http://groups.google.com/group/mail-ruby/browse_thread/thread/e93bbd05706478dd?pli=1
 gem 'mail',                 :version => '~> 2.2.15'
