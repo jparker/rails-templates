@@ -15,15 +15,15 @@ append_file '.rspec', "--format Fuubar\n"
 gsub_file 'spec/spec_helper.rb', 'config.mock_with :rspec', '# config.mock_with :rspec'
 gsub_file 'spec/spec_helper.rb', '# config.mock_with :mocha', 'config.mock_with :mocha'
 
-generate 'cucumber:install', '--capybara'
-gsub_file 'features/support/env.rb', '# DatabaseCleaner.strategy', 'DatabaseCleaner.strategy'
-file 'features/support/factory_girl_steps.rb', "require 'factory_girl/step_definitions'\n"
-
 generate 'devise:install'
 inject_into_file 'spec/spec_helper.rb', "  config.include Devise::TestHelpers, :type => :controller\n", :after => "RSpec.configure do |config|\n"
 todo 'cancan', '$ rails g cancan:ability'
 
 generate 'jquery:install'
+gsub_file 'config/application.rb',
+          'config.action_view.javascript_expansions[:defaults] = %w()',
+          'config.action_view.javascript_expansions[:defaults] = %w(jquery.min rails)'
+
 generate 'formtastic:install'
 
 hoptoad_api_key = ask('What is the Hoptoad API key for this project (leave blank to skip)?')

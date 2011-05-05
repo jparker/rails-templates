@@ -1,0 +1,17 @@
+=== ABOUT ===
+
+This project contains application templates for use when generating
+applications using Rails 3. The code was originally derived from Ryan Bates'
+Railscast #148[0] (which I heartily recommend for an introduction to
+application templates).
+
+=== USAGE ===
+
+$ rails new APP_NAME -T -J -m main.rb [-d {postgresql,mysql,...}]
+
+(The template builds applications which use RSpec and jQuery instead of
+Test::Unit and Prototype. For this reason, I recommend using the -T and
+-J options when generating the application as shown above. This omits the
+files normally created for those two packages.)
+
+[0] http://railscasts.com/episodes/148-app-templates-in-rails-2-3

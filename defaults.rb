@@ -36,9 +36,9 @@ module Rack
 end
 RUBY
 
-use_ssl = ask('Will this application require SSL?')
+use_ssl = ask('Will this application require SSL [y/n]?')
 if use_ssl.present? && use_ssl =~ /\Ay(es)?/i
-  gem 'rack-ssl', :version => '~> 1.2.0', :group => :production
+  gem 'rack-ssl', :version => '~> 1.3.2', :group => :production
   prepend_file 'config/environments/production.rb', "require 'rack/ssl'\n\n"
   inject_into_file 'config/environments/production.rb', "\n  config.middleware.insert_before ActionDispatch::Cookies, Rack::SSL\n", :after => '::Application.configure do'
 end
