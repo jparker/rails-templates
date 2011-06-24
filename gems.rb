@@ -3,8 +3,7 @@ gem 'factory_girl_rails', :version => '~> 1.0.1', :group => [:test, :development
 gem 'faker', :group => [:test, :development]
 gem 'shoulda', :version => '~> 2.11.3', :group => :test
 gem 'mocha', :version => '~> 0.9.11', :group => :test
-# TODO: switch to version after capybara 1.0 is released
-gem 'capybara', :group => :test, :git => 'https://github.com/jnicklas/capybara'
+gem 'capybara', :group => :test, :version => '~> 1.0.0'
 gem 'launchy', :version => '~> 0.3.7', :group => :test
 
 gem 'kaminari', :version => '~> 0.12.3'

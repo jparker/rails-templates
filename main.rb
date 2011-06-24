@@ -15,7 +15,6 @@ gsub_file 'spec/spec_helper.rb', 'config.mock_with :rspec', '# config.mock_with 
 gsub_file 'spec/spec_helper.rb', '# config.mock_with :mocha', 'config.mock_with :mocha'
 inject_into_file 'spec/spec_helper.rb', "require 'capybara/rspec'\n", :after => "require 'rspec/rails'\n"
 
-apply File.join(File.dirname(__FILE__), 'defaults.rb')
 apply File.join(File.dirname(__FILE__), 'urgetopunt.rb')
 apply File.join(File.dirname(__FILE__), 'authlogic.rb') if @use_authlogic
 
@@ -25,6 +24,14 @@ generate 'jquery:install'
 gsub_file 'config/application.rb',
           'config.action_view.javascript_expansions[:defaults] = %w()',
           'config.action_view.javascript_expansions[:defaults] = %w(jquery.min jquery_ujs)'
+
+inject_into_file 'config/application.rb',
+                 "    config.active_record.schema_format = :sql\n\n",
+                 :after => "class Application < Rails::Application\n"
+
+gsub_file 'config/environments/test.rb',
+          '# config.active_record.schema_format = :sql',
+          'config.active_record.schema_format = :sql'
 
 remove_file 'app/views/layouts/application.html.erb'
 file 'app/views/layouts/application.html.haml', <<HAML
