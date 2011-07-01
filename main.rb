@@ -92,6 +92,7 @@ append_file '.gitignore', <<GIT
 *~
 #*#
 .DS_Store
+config/database.yml
 webrat.log
 GIT
 
