@@ -14,6 +14,7 @@ generate 'rspec:install'
 gsub_file 'spec/spec_helper.rb', 'config.mock_with :rspec', '# config.mock_with :rspec'
 gsub_file 'spec/spec_helper.rb', '# config.mock_with :mocha', 'config.mock_with :mocha'
 inject_into_file 'spec/spec_helper.rb', "require 'capybara/rspec'\n", :after => "require 'rspec/rails'\n"
+inject_into_file 'spec/spec_helper.rb', "  config.include Factory::Syntax::Methods\n", :after => "RSpec.configure do |config|\n"
 
 apply File.join(File.dirname(__FILE__), 'urgetopunt.rb')
 apply File.join(File.dirname(__FILE__), 'authlogic.rb') if @use_authlogic
