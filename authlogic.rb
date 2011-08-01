@@ -162,7 +162,3 @@ file 'app/views/user_sessions/new.html.haml', <<HAML
   %p
     = f.submit 'Sign in'
 HAML
-
-inject_into_file 'app/views/layouts/application.html.haml',
-                 "    = link_to 'Sign out', sign_out_path\n",
-                 after: "#foot\n"

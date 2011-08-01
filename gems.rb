@@ -11,7 +11,7 @@ gem 'formtastic', :version => '~> 1.2.3'
 gem 'inherited_resources', :version => '~> 1.2.1'
 gem 'haml', :version => '~> 3.1.1'
 gem 'sass', :version => '~> 3.1.1'
-gem 'authlogic', :version => '~> 3.0.2' if @use_authlogic
+gem 'authlogic', :version => '~> 3.0.2' if use_authlogic?
 gem 'cancan', :version => '~> 1.6.3'
 gem 'hoptoad_notifier', :version => '~> 2.4.9'
 gem 'escape_utils', :version => '~> 0.2.3'
@@ -21,6 +21,6 @@ gem 'rails3-generators', :group => :development
 gem 'haml-rails', :group => :development
 gem 'jquery-rails', :version => '~> 1.0', :group => :development
 
-gem 'rack-ssl', :version => '~>1.3.2', :group => :production if @require_ssl
+gem 'rack-ssl', :version => '~>1.3.2', :group => :production if require_ssl?
 
 run 'bundle install'
