@@ -67,7 +67,7 @@ RUBY
 route 'resource :user_session, only: [:new, :create, :destroy]'
 route "match '/sign_in' => 'user_sessions#new', as: :sign_in"
 route "match '/sign_out' => 'user_sessions#destroy', as: :sign_out"
-todo 'authlogic', 'you must configure root_path in config/routes.rb and remove public/index.html'
+todo 'authlogic', 'configure root_path in config/routes.rb and remove public/index.html'
 
 file 'spec/factories/users.rb', <<RUBY
 Factory.define(:user) do |f|
