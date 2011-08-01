@@ -1,12 +1,14 @@
 # TODO: view spec for sign in form? call #active_authlogic in spec_helper? copy shoulda_macros/authlogic.rb
 generate 'authlogic:session', 'user_session'
-generate :model, 'user', 'username:string', 'crypted_password:string', 'password_salt:string', 'persistence_token:string'
+generate :model, 'user', 'username:string', 'name:string', 'email:string', 'crypted_password:string', 'password_salt:string', 'persistence_token:string'
 migration_file = Dir["db/migrate/*_create_users.rb"].first
 gsub_file migration_file,
-  /\.string :(username|crypted_password|password_salt|persistence_token)/,
+  /\.string :(username|name|email|crypted_password|password_salt|persistence_token)/,
   '.string :\1, null: false'
-# BUG: #inject_into_file only works on the first of the four calls below (regardless of order)
+# BUG: #inject_into_file only works on the first of the calls below (regardless of order)
 # inject_into_file migration_file, ', null: false', after: ':username'
+# inject_into_file migration_file, ', null: false', after: ':name'
+# inject_into_file migration_file, ', null: false', after: ':email'
 # inject_into_file migration_file, ', null: false', after: ':crypted_password'
 # inject_into_file migration_file, ', null: false', after: ':password_salt'
 # inject_into_file migration_file, ', null: false', after: ':persistence_token'
@@ -14,9 +16,14 @@ inject_into_file migration_file,
                  "    add_index :users, :username, unique: true\n    add_index :users, :persistence_token\n",
                  after: "t.timestamps\n    end\n"
 
+macros_file = File.expand_path(File.join(File.dirname(`gem which authlogic`.chomp), '..', 'shoulda_macros', 'authlogic.rb'))
+FileUtils.mkdir_p File.join('spec', 'support')
+FileUtils.cp macros_file, File.join('spec', 'support', 'authlogic.rb')
+
 gsub_file 'spec/models/user_spec.rb', /  pending ".*"/, <<RUBY
-  # TODO: use authlogic shoulda matcher instead: it { should have_authlogic }
-  it { should respond_to(:password=) }
+  include Authlogic::Shoulda::Matchers
+
+  it { should have_authlogic }
 RUBY
 inject_into_class 'app/models/user.rb', 'User', "  acts_as_authentic\n"
 
@@ -70,10 +77,14 @@ route "match '/sign_out' => 'user_sessions#destroy', as: :sign_out"
 todo 'authlogic', 'configure root_path in config/routes.rb and remove public/index.html'
 
 file 'spec/factories/users.rb', <<RUBY
-Factory.define(:user) do |f|
-  f.sequence(:username)   { |n| "user\#{n}" }
-  f.password              { ('a'..'z').to_a.shuffle[0...8].join }
-  f.password_confirmation { |u| u.password }
+FactoryGirl.define do
+  factory(:user) do
+    sequence(:username) { |i| "user\#{i}" }
+    name { Faker::Name.name }
+    email { "\#{username}@example.com" }
+    password { ('a'..'z').to_a.shuffle[0...8].join }
+    password_confirmation { password }
+  end
 end
 RUBY
 
@@ -81,7 +92,7 @@ file 'spec/requests/user_sessions_spec.rb', <<RUBY
 require 'spec_helper'
 
 describe 'UserSessions' do
-  before { Factory(:user, username: 'remy', password: 'secret') }
+  before { create(:user, username: 'remy', password: 'secret') }
 
   describe 'POST /user_sessions' do
     it 'redirects to home page after successfully signing in' do
