@@ -78,6 +78,7 @@ if use_authlogic?
 end
 
 generate 'formtastic:install'
+generate 'responders:install'
 
 initializer 'rack_escape_utils.rb', <<RUBY
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/

@@ -9,6 +9,7 @@ gem 'launchy', :version => '~> 0.3.7', :group => :test
 gem 'kaminari', :version => '~> 0.12.3'
 gem 'formtastic', :version => '~> 1.2.3'
 gem 'inherited_resources', :version => '~> 1.2.1'
+gem 'responders', :version => '~> 0.6.4'
 gem 'haml', :version => '~> 3.1.1'
 gem 'sass', :version => '~> 3.1.1'
 gem 'authlogic', :version => '~> 3.0.2' if use_authlogic?
