@@ -20,6 +20,11 @@ macros_file = File.expand_path(File.join(File.dirname(`gem which authlogic`.chom
 FileUtils.mkdir_p File.join('spec', 'support')
 FileUtils.cp macros_file, File.join('spec', 'support', 'authlogic.rb')
 
+inject_into_file 'spec/spec_helper.rb', <<RUBY, after: "RSpec.configure do |config|\n"
+  # speed up password encryption during testing
+  config.before(:suite) { Authlogic::CryptoProviders::BCrypt.cost = 1 }
+RUBY
+
 gsub_file 'spec/models/user_spec.rb', /  pending ".*"/, <<RUBY
   include Authlogic::Shoulda::Matchers
 
