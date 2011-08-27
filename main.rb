@@ -4,12 +4,12 @@ def todo(component, message)
   append_file 'TODO', "[ ] #{message} (#{component})\n"
 end
 
-def hoptoad_api_key
-  @hoptoad_api_key ||= ask("What is this app's Hoptoad API key (leave blank to skip)?")
+def airbrake_api_key
+  @airbrake_api_key ||= ask("What is this app's Airbrake API key (leave blank to skip)?")
 end
 
-def use_hoptoad?
-  hoptoad_api_key.present?
+def use_airbrake?
+  airbrake_api_key.present?
 end
 
 def use_authlogic?
@@ -114,9 +114,9 @@ GIT
 
 file '.autotest', "require 'autotest/bundler'\n"
 
-if use_hoptoad?
-  generate 'hoptoad', '--api-key', hoptoad_api_key
-  inject_into_file 'app/views/layouts/application.html.haml', "= hoptoad_javascript_notifier\n  ", :before => "= csrf_meta_tag"
+if use_airbrake?
+  generate 'airbrake', '--api-key', airbrake_api_key
+  inject_into_file 'app/views/layouts/application.html.haml', "= airbrake_javascript_notifier\n  ", :before => "= csrf_meta_tag"
 else
-  todo 'hoptoad', 'run the hoptoad generator with the --api-key options'
+  todo 'airbrake', 'run the airbrake generator with the --api-key options'
 end

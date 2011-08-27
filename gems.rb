@@ -14,7 +14,7 @@ gem 'haml', :version => '~> 3.1.1'
 gem 'sass', :version => '~> 3.1.1'
 gem 'authlogic', :version => '~> 3.0.2' if use_authlogic?
 gem 'cancan', :version => '~> 1.6.3'
-gem 'hoptoad_notifier', :version => '~> 2.4.9'
+gem 'airbrake', :version => '~> 3.0'
 gem 'escape_utils', :version => '~> 0.2.3'
 gem 'newrelic_rpm', :version => '~> 3.1.1'
 
