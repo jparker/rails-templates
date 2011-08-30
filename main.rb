@@ -101,8 +101,6 @@ if require_ssl?
     :after => "::Application.configure do\n"
 end
 
-File.rename 'config/database.yml', 'config/database_example.yml'
-
 append_file '.gitignore', <<GIT
 *.swp
 *~

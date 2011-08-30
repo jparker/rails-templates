@@ -12,6 +12,7 @@ gem 'inherited_resources', :version => '~> 1.2.1'
 gem 'responders', :version => '~> 0.6.4'
 gem 'haml', :version => '~> 3.1.1'
 gem 'sass', :version => '~> 3.1.1'
+gem 'validates_existence', :version => '~> 0.5.3'
 gem 'authlogic', :version => '~> 3.0.2' if use_authlogic?
 gem 'cancan', :version => '~> 1.6.3'
 gem 'airbrake', :version => '~> 3.0'
