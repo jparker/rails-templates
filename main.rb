@@ -22,23 +22,25 @@ def require_ssl?
   @require_ssl = yes?('Will this application require SSL in production?')
 end
 
+def prepend_to_rspec_config_block(text)
+  inject_into_file 'spec/spec_helper.rb', text, after: "RSpec.configure do |config|\n"
+end
+
 apply File.join(File.dirname(__FILE__), 'gems.rb')
 
 generate 'rspec:install'
-gsub_file 'spec/spec_helper.rb', 'config.mock_with :rspec', '# config.mock_with :rspec'
-gsub_file 'spec/spec_helper.rb', '# config.mock_with :mocha', 'config.mock_with :mocha'
-inject_into_file 'spec/spec_helper.rb', "require 'capybara/rspec'\n", :after => "require 'rspec/rails'\n"
-inject_into_file 'spec/spec_helper.rb', "  config.include Factory::Syntax::Methods\n", :after => "RSpec.configure do |config|\n"
+gsub_file 'spec/spec_helper.rb', /(config.mock_with :rspec)/, '# \1'
+gsub_file 'spec/spec_helper.rb', /# (config.mock_with :mocha)/, '\1'
+gsub_file 'spec/spec_helper.rb', /(config.fixture_path =)/, '# \1'
+inject_into_file 'spec/spec_helper.rb', "require 'capybara/rspec'\n", after: "require 'rspec/rails'\n"
+prepend_to_rspec_config_block "  config.include Factory::Syntax::Methods\n"
+
+run 'guard init rspec'
 
 apply File.join(File.dirname(__FILE__), 'urgetopunt.rb')
 apply File.join(File.dirname(__FILE__), 'authlogic.rb') if use_authlogic?
 
 todo 'cancan', 'run the cancan:ability generator'
-
-generate 'jquery:install'
-gsub_file 'config/application.rb',
-          'config.action_view.javascript_expansions[:defaults] = %w()',
-          'config.action_view.javascript_expansions[:defaults] = %w(jquery.min jquery_ujs)'
 
 inject_into_file 'config/application.rb',
                  "    config.active_record.schema_format = :sql\n\n",

@@ -20,7 +20,7 @@ macros_file = File.expand_path(File.join(File.dirname(`gem which authlogic`.chom
 FileUtils.mkdir_p File.join('spec', 'support')
 FileUtils.cp macros_file, File.join('spec', 'support', 'authlogic.rb')
 
-inject_into_file 'spec/spec_helper.rb', <<RUBY, after: "RSpec.configure do |config|\n"
+prepend_to_rspec_config_block <<RUBY
   # speed up password encryption during testing
   config.before(:suite) { Authlogic::CryptoProviders::BCrypt.cost = 1 }
 RUBY
@@ -97,7 +97,12 @@ file 'spec/requests/user_sessions_spec.rb', <<RUBY
 require 'spec_helper'
 
 describe 'UserSessions' do
-  before { create(:user, username: 'remy', password: 'secret') }
+  before do
+    # User FactoryGirl.build and User#save_without_session_maintenance to work around
+    # a problem between Rails 3.1 streaming and Authlogic
+    user = build(:user, username: 'remy', password: 'secret')
+    user.save_without_session_maintenance
+  end
 
   describe 'POST /user_sessions' do
     it 'redirects to home page after successfully signing in' do

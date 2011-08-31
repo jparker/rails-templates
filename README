@@ -7,11 +7,11 @@ application templates).
 
 === USAGE ===
 
-$ rails new APP_NAME -T -J -m main.rb [-d {postgresql,mysql,...}]
+$ rails new APP_NAME -T -m main.rb [-d {postgresql,mysql,...}]
 
-(The template builds applications which use RSpec and jQuery instead of
-Test::Unit and Prototype. For this reason, I recommend using the -T and
--J options when generating the application as shown above. This omits the
-files normally created for those two packages.)
+(The template builds applications which use RSpec instead of Test::Unit.
+For this reason, I recommend using the -T options when generating the
+application as shown above. This omits the files normally created for
+Test::Unit.)
 
 [0] http://railscasts.com/episodes/148-app-templates-in-rails-2-3
