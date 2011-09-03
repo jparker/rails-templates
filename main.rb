@@ -56,7 +56,7 @@ file 'app/views/layouts/application.html.haml', <<HAML
 !!! 5
 %head
   %title= yield :title
-  = stylesheet_link_tag :all
+  = stylesheet_link_tag 'application'
   = csrf_meta_tag
 %body
   #head
@@ -71,7 +71,7 @@ file 'app/views/layouts/application.html.haml', <<HAML
 
   #foot
 
-  = javascript_include_tag :defaults
+  = javascript_include_tag 'application'
 HAML
 if use_authlogic?
   inject_into_file 'app/views/layouts/application.html.haml',
