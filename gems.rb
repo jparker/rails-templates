@@ -1,5 +1,5 @@
 gem 'rspec-rails', :version => '~> 2.6.0', :group => [:test, :development]
-gem 'factory_girl_rails', :version => '~> 1.1.0', :group => :test
+gem 'factory_girl_rails', :version => '~> 1.2.0', :group => :test
 gem 'faker', :group => [:test, :development]
 gem 'shoulda', :version => '~> 2.11.3', :group => :test
 gem 'mocha', :version => '~> 0.9.11', :group => :test
@@ -20,7 +20,8 @@ gem 'authlogic', :version => '~> 3.0.2' if use_authlogic?
 gem 'cancan', :version => '~> 1.6.3'
 gem 'airbrake', :version => '~> 3.0'
 gem 'escape_utils', :version => '~> 0.2.3'
-todo 'add newrelic_rpm to Gemfile', 'newrlic_rpm'
+
+todo 'add newrelic_rpm to Gemfile when ready to configure', 'newrlic_rpm'
 
 gem 'rails3-generators', :group => :development
 gem 'haml-rails', :group => :development
