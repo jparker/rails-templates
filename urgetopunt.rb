@@ -31,9 +31,9 @@ ActiveRecord::Migration.extend Urgetopunt::MigrationHelper
 RUBY
 
 inject_into_file 'app/helpers/application_helper.rb', <<RUBY, :after => "module ApplicationHelper\n"
-  def title(text)
-    content_for :title do
-      text
+  def title(*crumbs)
+    provide :title do
+      crumbs.map { |str| h(str) }.join(' &raquo; ').html_safe
     end
   end
 
