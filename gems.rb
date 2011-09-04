@@ -1,7 +1,7 @@
 gem 'rspec-rails', :version => '~> 2.6.0', :group => [:test, :development]
 gem 'factory_girl_rails', :version => '~> 1.2.0', :group => :test
 gem 'faker', :group => [:test, :development]
-gem 'shoulda', :version => '~> 2.11.3', :group => :test
+gem 'shoulda-matchers', :version => '~> 1.0.0.beta3', :group => :test
 gem 'mocha', :version => '~> 0.9.11', :group => :test
 gem 'capybara', :group => :test, :version => '~> 1.0.0'
 gem 'launchy', :version => '~> 0.3.7', :group => :test
