@@ -32,7 +32,7 @@ generate 'rspec:install'
 gsub_file 'spec/spec_helper.rb', /(config.mock_with :rspec)/, '# \1'
 gsub_file 'spec/spec_helper.rb', /# (config.mock_with :mocha)/, '\1'
 gsub_file 'spec/spec_helper.rb', /(config.fixture_path =)/, '# \1'
-inject_into_file 'spec/spec_helper.rb', "require 'capybara/rspec'\n", after: "require 'rspec/rails'\n"
+inject_into_file 'spec/spec_helper.rb', "require 'capybara/rspec'\nrequire 'capybara/rails'\n", after: "require 'rspec/rails'\n"
 prepend_to_rspec_config_block "  config.include Factory::Syntax::Methods\n"
 
 run 'guard init rspec'
@@ -43,12 +43,10 @@ apply File.join(File.dirname(__FILE__), 'authlogic.rb') if use_authlogic?
 todo 'cancan', 'run the cancan:ability generator'
 
 inject_into_file 'config/application.rb',
-                 "    config.active_record.schema_format = :sql\n\n",
-                 :after => "class Application < Rails::Application\n"
+  "    config.active_record.schema_format = :sql\n\n",
+  after: "class Application < Rails::Application\n"
 
-gsub_file 'config/environments/test.rb',
-          '# config.active_record.schema_format = :sql',
-          'config.active_record.schema_format = :sql'
+gsub_file 'config/environments/test.rb', /# (config.active_record.schema_format = :sql)/, '\1'
 
 remove_file 'app/views/layouts/application.html.erb'
 file 'app/views/layouts/application.html.haml', <<HAML
@@ -97,10 +95,7 @@ end
 RUBY
 
 if require_ssl?
-  prepend_file 'config/environments/production.rb', "require 'rack/ssl'\n\n"
-  inject_into_file 'config/environments/production.rb',
-    "  config.middleware.insert_before ActionDispatch::Cookies, Rack::SSL\n",
-    :after => "::Application.configure do\n"
+  gsub_file 'config/environments/production.rb', /# (config\.force_ssl = true)/, '\1'
 end
 
 append_file '.gitignore', <<GIT

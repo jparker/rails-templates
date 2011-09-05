@@ -26,6 +26,4 @@ todo 'add newrelic_rpm to Gemfile when ready to configure', 'newrlic_rpm'
 gem 'rails3-generators', :group => :development
 gem 'haml-rails', :group => :development
 
-gem 'rack-ssl', :version => '~>1.3.2', :group => :production if require_ssl?
-
 run 'bundle install'
