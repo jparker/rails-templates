@@ -1,0 +1,20 @@
+!!! XML
+!!! 5
+%head
+  %title= yield :title
+  = stylesheet_link_tag 'application'
+  = csrf_meta_tag
+%body
+  #head
+    %h1= yield :title
+
+  #main
+    #flash
+      - flash.each do |level, message|
+        %p{:class => level}= message
+
+    = yield
+
+  #foot
+
+  = javascript_include_tag 'application'

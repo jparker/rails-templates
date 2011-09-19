@@ -12,9 +12,9 @@ def use_airbrake?
   airbrake_api_key.present?
 end
 
-def use_authlogic?
-  return @use_authlogic if defined?(@use_authlogic)
-  @use_authlogic = yes?('Will this application use Authlogic for authentication?')
+def use_sorcery?
+  return @use_sorcery if defined?(@use_sorcery)
+  @use_sorcery = yes?('Generate barebones authentication using Sorcery?')
 end
 
 def require_ssl?
@@ -22,23 +22,42 @@ def require_ssl?
   @require_ssl = yes?('Will this application require SSL in production?')
 end
 
-def prepend_to_rspec_config_block(text)
+def prepend_to_rspec_config(text)
   inject_into_file 'spec/spec_helper.rb', text, after: "RSpec.configure do |config|\n"
+end
+alias rspec_config prepend_to_rspec_config
+
+def template(filename)
+  path = File.expand_path(File.join(File.dirname(__FILE__), 'templates', filename))
+  if filename.end_with?('.erb')
+    ERB.new(File.read(path)).result
+  else
+    File.read(path)
+  end
 end
 
 apply File.join(File.dirname(__FILE__), 'gems.rb')
 
 generate 'rspec:install'
+append_file 'Rakefile', <<RUBY
+
+# On Rails 3.1 the default task is "test" even after running rspec:install. Removing
+# the default task and defining it again (depending on "spec") fixes the problem.
+# http://blog.elizabrock.com/post/7213861688/rails-3-1-rake-aborted-dont-know-how-to-build-task
+task(:default).clear
+task default: :spec
+RUBY
+
 gsub_file 'spec/spec_helper.rb', /(config.mock_with :rspec)/, '# \1'
 gsub_file 'spec/spec_helper.rb', /# (config.mock_with :mocha)/, '\1'
 gsub_file 'spec/spec_helper.rb', /(config.fixture_path =)/, '# \1'
 inject_into_file 'spec/spec_helper.rb', "require 'capybara/rspec'\nrequire 'capybara/rails'\n", after: "require 'rspec/rails'\n"
-prepend_to_rspec_config_block "  config.include Factory::Syntax::Methods\n"
+rspec_config "  config.include Factory::Syntax::Methods\n"
 
-run 'guard init rspec'
+run 'bundle exec guard init rspec'
 
 apply File.join(File.dirname(__FILE__), 'urgetopunt.rb')
-apply File.join(File.dirname(__FILE__), 'authlogic.rb') if use_authlogic?
+apply File.join(File.dirname(__FILE__), 'sorcery.rb') if use_sorcery?
 
 todo 'cancan', 'run the cancan:ability generator'
 
@@ -49,50 +68,26 @@ inject_into_file 'config/application.rb',
 gsub_file 'config/environments/test.rb', /# (config.active_record.schema_format = :sql)/, '\1'
 
 remove_file 'app/views/layouts/application.html.erb'
-file 'app/views/layouts/application.html.haml', <<HAML
-!!! XML
-!!! 5
-%head
-  %title= yield :title
-  = stylesheet_link_tag 'application'
-  = csrf_meta_tag
-%body
-  #head
-    %h1= yield :title
-
-  #main
-    #flash
-      - flash.each do |level, message|
-        %p{:class => level}= message
-
-    = yield
-
-  #foot
-
-  = javascript_include_tag 'application'
-HAML
-if use_authlogic?
+file 'app/views/layouts/application.html.haml', template('app/views/layouts/application.html.haml')
+if use_sorcery?
   inject_into_file 'app/views/layouts/application.html.haml',
                    "    = link_to 'Sign out', sign_out_path\n",
                    after: "#foot\n"
+  file 'app/views/layouts/sessions.html.haml', template('app/views/layouts/sessions.html.haml')
 end
 
 generate 'formtastic:install'
 generate 'responders:install'
 
-initializer 'rack_escape_utils.rb', <<RUBY
-# http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
-require 'escape_utils/html/rack'
-require 'escape_utils/html/haml'
+inject_into_file 'config/locales/responders.en.yml',
+  "        alert: '%{resource_name} could not be created (see errors below).'\n",
+  after: "successfully created.'\n"
+inject_into_file 'config/locales/responders.en.yml',
+  "        alert: '%{resource_name} could not be updated (see errors below).'\n",
+  after: "successfully updated.'\n"
+gsub_file 'config/locales/responders.en.yml', 'destroyed', 'removed'
 
-module Rack
-  module Utils
-    def escape(s)
-      EscapeUtils.escape_url(s)
-    end
-  end
-end
-RUBY
+initializer 'rack_escape_utils.rb', template('config/initializers/rack_escape_utils.rb')
 
 if require_ssl?
   gsub_file 'config/environments/production.rb', /# (config\.force_ssl = true)/, '\1'
@@ -111,7 +106,7 @@ file '.autotest', "require 'autotest/bundler'\n"
 
 if use_airbrake?
   generate 'airbrake', '--api-key', airbrake_api_key
-  inject_into_file 'app/views/layouts/application.html.haml', "= airbrake_javascript_notifier\n  ", :before => "= csrf_meta_tag"
+  inject_into_file 'app/views/layouts/application.html.haml', "= airbrake_javascript_notifier\n  ", before: "= csrf_meta_tag"
 else
   todo 'airbrake', 'run the airbrake generator with the --api-key options'
 end

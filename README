@@ -7,11 +7,13 @@ application templates).
 
 === USAGE ===
 
-$ rails new APP_NAME -T -m main.rb [-d {postgresql,mysql,...}]
+$ rails new APP_NAME -T -m main.rb [-d {postgresql,mysql,...}] --skip-bundle
 
-(The template builds applications which use RSpec instead of Test::Unit.
-For this reason, I recommend using the -T options when generating the
-application as shown above. This omits the files normally created for
-Test::Unit.)
+The -T option omits Test::Unit files which aren't needed, as the templated
+app will use RSpec for testing.
+
+The --skip-bundle command tells Rails not to run "bundle install" after
+building the application. This isn't needed because the template itself
+already runs "bundle install".
 
 [0] http://railscasts.com/episodes/148-app-templates-in-rails-2-3
