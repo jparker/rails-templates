@@ -1,41 +1,4 @@
-def todo(component, message)
-  say "\033[36mTODO\033[0m check TODO file when configuring #{component}"
-  create_file 'TODO', '' unless File.exist?('TODO')
-  append_file 'TODO', "[ ] #{message} (#{component})\n"
-end
-
-def airbrake_api_key
-  @airbrake_api_key ||= ask("What is this app's Airbrake API key (leave blank to skip)?")
-end
-
-def use_airbrake?
-  airbrake_api_key.present?
-end
-
-def use_sorcery?
-  return @use_sorcery if defined?(@use_sorcery)
-  @use_sorcery = yes?('Generate barebones authentication using Sorcery?')
-end
-
-def require_ssl?
-  return @require_ssl if defined?(@require_ssl)
-  @require_ssl = yes?('Will this application require SSL in production?')
-end
-
-def prepend_to_rspec_config(text)
-  inject_into_file 'spec/spec_helper.rb', text, after: "RSpec.configure do |config|\n"
-end
-alias rspec_config prepend_to_rspec_config
-
-def template(filename)
-  path = File.expand_path(File.join(File.dirname(__FILE__), 'templates', filename))
-  if filename.end_with?('.erb')
-    ERB.new(File.read(path)).result
-  else
-    File.read(path)
-  end
-end
-
+require File.join(File.dirname(__FILE__), 'helpers.rb')
 apply File.join(File.dirname(__FILE__), 'gems.rb')
 
 generate 'rspec:install'
@@ -68,12 +31,12 @@ inject_into_file 'config/application.rb',
 gsub_file 'config/environments/test.rb', /# (config.active_record.schema_format = :sql)/, '\1'
 
 remove_file 'app/views/layouts/application.html.erb'
-file 'app/views/layouts/application.html.haml', template('app/views/layouts/application.html.haml')
+file 'app/views/layouts/application.html.haml', cat('app/views/layouts/application.html.haml')
 if use_sorcery?
   inject_into_file 'app/views/layouts/application.html.haml',
                    "    = link_to 'Sign out', sign_out_path\n",
                    after: "#foot\n"
-  file 'app/views/layouts/sessions.html.haml', template('app/views/layouts/sessions.html.haml')
+  file 'app/views/layouts/sessions.html.haml', cat('app/views/layouts/sessions.html.haml')
 end
 
 generate 'formtastic:install'
@@ -87,7 +50,7 @@ inject_into_file 'config/locales/responders.en.yml',
   after: "successfully updated.'\n"
 gsub_file 'config/locales/responders.en.yml', 'destroyed', 'removed'
 
-initializer 'rack_escape_utils.rb', template('config/initializers/rack_escape_utils.rb')
+initializer 'rack_escape_utils.rb', cat('config/initializers/rack_escape_utils.rb')
 
 if require_ssl?
   gsub_file 'config/environments/production.rb', /# (config\.force_ssl = true)/, '\1'
