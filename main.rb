@@ -22,8 +22,6 @@ run 'bundle exec guard init rspec'
 apply File.join(File.dirname(__FILE__), 'urgetopunt.rb')
 apply File.join(File.dirname(__FILE__), 'sorcery.rb') if use_sorcery?
 
-todo 'cancan', 'run the cancan:ability generator'
-
 inject_into_file 'config/application.rb',
   "    config.active_record.schema_format = :sql\n\n",
   after: "class Application < Rails::Application\n"
@@ -40,6 +38,7 @@ if use_sorcery?
 end
 
 generate 'formtastic:install'
+inject_into_file 'app/assets/stylesheets/application.css', " *= require formtastic\n", after: "require_self\n"
 generate 'responders:install'
 
 inject_into_file 'config/locales/responders.en.yml',

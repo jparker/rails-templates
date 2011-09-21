@@ -1,14 +1,14 @@
 - title 'Sign in'
 
-= form_tag session_path do
-  %fieldsets.inputs
+= form_tag session_path, class: 'formtastic' do
+  %fieldset.inputs
     %ol
-      %li.string#username_input
-        = label_tag :username
+      %li.string.input.stringish#username_input
+        = label_tag :username, 'Username', class: 'label'
         = text_field_tag :username
-      %li.password#password_input
-        = label_tag :password
+      %li.password.input.stringish#password_input
+        = label_tag :password, 'Password', class: 'label'
         = password_field_tag :password
-  %fieldsets.buttons
+  %fieldset.buttons
     %ol
-      %li= submit_tag 'Sign in'
+      %li.commit.button= submit_tag 'Sign in'
