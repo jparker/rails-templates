@@ -2,31 +2,31 @@ require 'spec_helper'
 
 describe UsersController do
   describe 'routing' do
-    it 'recognizes and generates #index' do
+    it 'routes to #index' do
       { get: '/users' }.should route_to('users#index')
     end
 
-    it 'recognizes and generates #show' do
+    it 'routes to #show' do
       { get: '/users/42' }.should route_to('users#show', id: '42')
     end
 
-    it 'recognizes and generates #new' do
+    it 'routes to #new' do
       { get: '/users/new' }.should route_to('users#new')
     end
 
-    it 'recognizes and generates #edit' do
+    it 'routes to #edit' do
       { get: '/users/42/edit' }.should route_to('users#edit', id: '42')
     end
 
-    it 'recognizes and generates #create' do
+    it 'routes to #create' do
       { post: '/users' }.should route_to('users#create')
     end
 
-    it 'recognizes and generates #update' do
+    it 'routes to #update' do
       { put: '/users/42' }.should route_to('users#update', id: '42')
     end
 
-    it 'recognizes and generates #destroy' do
+    it 'routes to #destroy' do
       { delete: '/users/42' }.should route_to('users#destroy', id: '42')
     end
   end
