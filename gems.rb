@@ -4,7 +4,7 @@ gem 'faker', group: [:test, :development]
 gem 'shoulda-matchers', version: '~> 1.0.0.beta3', group: :test
 gem 'mocha', version: '~> 0.9.11', group: :test
 gem 'capybara', group: :test, version: '~> 1.1.0'
-gem 'launchy', version: '~> 0.3.7', group: :test
+gem 'launchy', group: :test
 
 gem 'guard-rspec', group: :test
 gem 'growl_notify', group: :test
