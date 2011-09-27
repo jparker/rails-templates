@@ -25,6 +25,7 @@ apply File.join(File.dirname(__FILE__), 'sorcery.rb') if use_sorcery?
 inject_into_file 'config/application.rb',
   "    config.active_record.schema_format = :sql\n\n",
   after: "class Application < Rails::Application\n"
+gsub_file 'config/application.rb', /# config\.autoload_paths \+= .*/, 'config.autoload_paths += %W(#{config.root}/lib)'
 
 gsub_file 'config/environments/test.rb', /# (config.active_record.schema_format = :sql)/, '\1'
 
