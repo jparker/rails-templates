@@ -1,12 +1,18 @@
 module AuthenticationMacros
-  def sign_in_as(user)
+  def sign_in_as(username, password)
+    sign_out
     visit sign_in_path
-    fill_in 'Username', with: user.username
-    fill_in 'Password', with: user.password
+    fill_in 'Username', with: username
+    fill_in 'Password', with: password
     click_button 'Sign in'
   end
 
   def sign_in
-    sign_in_as(create(:user))
+    user = create(:user, password: 'secret')
+    sign_in_as(user.username, 'secret')
+  end
+
+  def sign_out
+    visit sign_out_path
   end
 end

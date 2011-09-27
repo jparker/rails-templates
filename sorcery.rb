@@ -33,3 +33,11 @@ rspec_config <<RUBY
   # speed up password encryption during testing
   config.before(:suite) { Sorcery::CryptoProviders::BCrypt.cost = 1 }
 RUBY
+
+inject_into_file 'app/views/layouts/appliation.html.haml', <<HAML, after: "#foot\n"
+    - if current_user
+      You are signed in as \#{current_user.username}
+      |
+      = link_to 'Sign out', sign_out_path
+HAML
+file 'app/views/layouts/sessions.html.haml', cat('app/views/layouts/sessions.html.haml')

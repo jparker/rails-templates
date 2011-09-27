@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'Users' do
-  describe 'GET /users' do
+  describe 'listing users' do
     let!(:users) { create_list(:user, 5) }
 
     it 'lists users' do
@@ -11,18 +11,17 @@ describe 'Users' do
       end
     end
 
-    context 'with 30 users' do
+    context 'with many users' do
       before { create_list(:user, 25) }
 
       it 'paginates user list' do
         visit users_path
-        click_link 'Next'
-        page.should have_selector('tbody tr.user', count: 5)
+        page.should have_xpath("//a[@href='#{users_path(page: 2)}']", text: 'Next')
       end
     end
   end
 
-  describe 'GET /users/:id' do
+  describe 'displaying an individual user' do
     let!(:user) { create(:user) }
 
     it 'displays details about user' do
@@ -33,7 +32,7 @@ describe 'Users' do
     end
   end
 
-  describe 'POST /users' do
+  describe 'creating a new user' do
     describe 'with valid attributes' do
       it "creates the user and redirects to the new user's page" do
         visit users_path
@@ -69,7 +68,7 @@ describe 'Users' do
     end
   end
 
-  describe 'PUT /users/:id' do
+  describe 'updating an existing user' do
     let!(:user) { create(:user, username: 'bob', email: 'bob@example.com') }
 
     describe 'with valid attributes' do
@@ -110,7 +109,7 @@ describe 'Users' do
     end
   end
 
-  describe 'DESTROY /users/:id' do
+  describe 'destroying an existing user' do
     let!(:user) { create(:user) }
 
     it 'destroys the user and redirects to the users index' do

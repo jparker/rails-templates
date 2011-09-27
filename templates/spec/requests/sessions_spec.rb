@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'Sessions' do
   let!(:user) { create(:user, username: 'bob', password: 'secret') }
 
-  describe 'POST /session' do
+  describe 'signing in' do
     it 'redirects to home page on success' do
       visit sign_in_path
       fill_in 'Username', with: 'bob'
@@ -25,7 +25,7 @@ describe 'Sessions' do
     end
   end
 
-  describe 'DELETE /session' do
+  describe 'signing out' do
     before { sign_in_as(user) }
 
     it 'redirects to sign in page after signing out' do

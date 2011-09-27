@@ -20,7 +20,6 @@ rspec_config "  config.include Factory::Syntax::Methods\n"
 run 'bundle exec guard init rspec'
 
 apply File.join(File.dirname(__FILE__), 'urgetopunt.rb')
-apply File.join(File.dirname(__FILE__), 'sorcery.rb') if use_sorcery?
 
 inject_into_file 'config/application.rb',
   "    config.active_record.schema_format = :sql\n\n",
@@ -31,12 +30,8 @@ gsub_file 'config/environments/test.rb', /# (config.active_record.schema_format 
 
 remove_file 'app/views/layouts/application.html.erb'
 file 'app/views/layouts/application.html.haml', cat('app/views/layouts/application.html.haml')
-if use_sorcery?
-  inject_into_file 'app/views/layouts/application.html.haml',
-                   "    = link_to 'Sign out', sign_out_path\n",
-                   after: "#foot\n"
-  file 'app/views/layouts/sessions.html.haml', cat('app/views/layouts/sessions.html.haml')
-end
+
+apply File.join(File.dirname(__FILE__), 'sorcery.rb') if use_sorcery?
 
 generate 'formtastic:install'
 inject_into_file 'app/assets/stylesheets/application.css', " *= require formtastic\n", after: "require_self\n"
