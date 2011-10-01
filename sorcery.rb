@@ -34,7 +34,7 @@ rspec_config <<RUBY
   config.before(:suite) { Sorcery::CryptoProviders::BCrypt.cost = 1 }
 RUBY
 
-inject_into_file 'app/views/layouts/appliation.html.haml', <<HAML, after: "#foot\n"
+inject_into_file 'app/views/layouts/application.html.haml', <<HAML, after: "#foot\n"
     - if current_user
       You are signed in as \#{current_user.username}
       |

@@ -26,7 +26,7 @@ describe 'Sessions' do
   end
 
   describe 'signing out' do
-    before { sign_in_as(user) }
+    before { sign_in_as('bob', 'secret') }
 
     it 'redirects to sign in page after signing out' do
       visit root_path

@@ -18,6 +18,10 @@ inject_into_file 'spec/spec_helper.rb', "require 'capybara/rspec'\nrequire 'capy
 rspec_config "  config.include Factory::Syntax::Methods\n"
 
 run 'bundle exec guard init rspec'
+inject_into_file 'Guardfile', "require 'active_support/inflector'\n\n", before: "guard 'rspec',"
+inject_into_file 'Guardfile', <<-RUBY, before: 'end'
+  watch(%r{^spec/factories/(.+)\.rb$}) { |m| ["spec/models/\#{m[1].singularize}_spec.rb", "spec/controllers/\#{m[1]}_controller_spec.rb", "spec/requests/\#{m[1]}_spec.rb"] }
+RUBY
 
 apply File.join(File.dirname(__FILE__), 'urgetopunt.rb')
 
