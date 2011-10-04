@@ -28,10 +28,10 @@ route "resources :users"
 remove_file 'public/index.html'
 
 rspec_config <<RUBY
-  config.include AuthenticationMacros, type: :request
+    config.include AuthenticationMacros, type: :request
 
-  # speed up password encryption during testing
-  config.before(:suite) { Sorcery::CryptoProviders::BCrypt.cost = 1 }
+    # speed up password encryption during testing
+    config.before(:suite) { Sorcery::CryptoProviders::BCrypt.cost = 1 }
 RUBY
 
 inject_into_file 'app/views/layouts/application.html.haml', <<HAML, after: "#foot\n"

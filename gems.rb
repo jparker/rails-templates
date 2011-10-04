@@ -1,13 +1,14 @@
 gem 'rspec-rails', version: '~> 2.6.0', group: [:test, :development]
 gem 'factory_girl_rails', version: '~> 1.2.0', group: :test
 gem 'faker', group: [:test, :development]
-gem 'shoulda-matchers', version: '~> 1.0.0.beta3', group: :test
+gem 'shoulda', group: :test
 gem 'mocha', version: '~> 0.9.11', group: :test
 gem 'capybara', group: :test, version: '~> 1.1.0'
 gem 'launchy', group: :test
 
 gem 'guard-rspec', group: :test
-gem 'growl_notify', group: :test
+gem 'guard-spork', group: :test
+gem 'growl', group: :test
 gem 'rb-fsevent', group: :test, require: false
 
 gem 'kaminari', version: '~> 0.12.3'
