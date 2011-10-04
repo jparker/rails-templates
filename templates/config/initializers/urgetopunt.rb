@@ -1,2 +1,2 @@
 require 'urgetopunt/migration_helpers'
-ActiveRecord::Migration.extend Urgetopunt::MigrationHelpers
+ActiveRecord::Migration.send :include, Urgetopunt::MigrationHelpers
