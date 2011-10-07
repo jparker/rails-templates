@@ -6,6 +6,20 @@ describe User do
   it { should allow_mass_assignment_of(:password) }
   it { should allow_mass_assignment_of(:password_confirmation) }
 
+  describe 'before validation' do
+    it 'normalizes username' do
+      user = build(:user, username: ' WinsomeDangerParker ')
+      user.valid?
+      user.username.should eq('winsomedangerparker')
+    end
+
+    it 'normalizes email address' do
+      user = build(:user, email: 'Winsome.Danger@Example.com')
+      user.valid?
+      user.email.should eq('winsome.danger@example.com')
+    end
+  end
+
   describe 'validation' do
     it { should validate_presence_of(:username) }
     it { should ensure_length_of(:username).is_at_least(2).is_at_most(32) }
@@ -17,10 +31,11 @@ describe User do
     it { should_not allow_value('john smith@gmail.com').for(:email) }
     it { should_not allow_value('bob@example').for(:email) }
 
-    context 'password confirmation' do
-      subject { build(:user, password_confirmation: 'frizzle') }
-      it { should allow_value('frizzle').for(:password) }
-      it { should_not allow_value('frazzle').for(:password) }
+    it 'validates confirmation of password' do
+      user = build(:user)
+      user.password, user.password_confirmation = 'frizzle', 'frazzle'
+      user.should_not be_valid
+      user.errors[:password].should include("doesn't match confirmation")
     end
 
     context 'when users exist' do
