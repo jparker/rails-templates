@@ -1,9 +1,9 @@
-- title 'Users', @user.username, 'Edit'
+- title 'Users', user.username, 'Edit'
 
 = render 'form'
 
 %ul.menu
   %li= link_to 'Users', users_path
   %li= link_to 'New user', new_user_path
-  %li= link_to 'View user', @user
-  %li= link_to 'Delete user', @user, method: :delete, confirm: 'This can not be undone. Do you still want to proceed?'
+  %li= link_to 'View user', user
+  %li= link_to 'Delete user', user, method: :delete, confirm: 'This can not be undone. Do you still want to proceed?'
