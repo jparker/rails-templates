@@ -1,4 +1,4 @@
-gem 'rspec-rails', version: '~> 2.6.0', group: [:test, :development]
+gem 'rspec-rails', version: '~> 2.7.0', group: [:test, :development]
 gem 'factory_girl_rails', version: '~> 1.3.0', group: :test
 gem 'faker', group: [:test, :development]
 gem 'shoulda-matchers', version: '~> 1.0.0.pre3', group: :test
