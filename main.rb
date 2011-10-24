@@ -28,6 +28,7 @@ inject_into_file 'config/application.rb',
   "    config.active_record.schema_format = :sql\n\n",
   after: "class Application < Rails::Application\n"
 gsub_file 'config/application.rb', /# config\.autoload_paths \+= .*/, 'config.autoload_paths += %W(#{config.root}/lib)'
+inject_into_file 'config/application.rb', "  Bundler.require(:darwin) if RUBY_PLATFORM.match(/darwin/i)\n", after: "if defined?(Bundler)\n"
 
 gsub_file 'config/environments/test.rb', /# (config.active_record.schema_format = :sql)/, '\1'
 

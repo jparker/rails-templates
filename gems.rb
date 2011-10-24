@@ -1,15 +1,16 @@
 gem 'rspec-rails', version: '~> 2.7.0', group: [:test, :development]
 gem 'factory_girl_rails', version: '~> 1.3.0', group: :test
 gem 'faker', group: [:test, :development]
-gem 'shoulda-matchers', version: '~> 1.0.0.pre3', group: :test
+gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers', group: :test
 gem 'mocha', version: '~> 0.10.0', group: :test
 gem 'capybara', group: :test, version: '~> 1.1.0'
 gem 'launchy', group: :test
 
 gem 'guard-rspec', group: :test
 gem 'guard-spork', group: :test
-gem 'growl', group: :test
-gem 'rb-fsevent', group: :test, require: false
+
+gem 'growl', group: :darwin
+gem 'rb-fsevent', group: :darwin, require: false
 
 gem 'kaminari', version: '~> 0.12.3'
 gem 'formtastic', version: '~> 2.0.0'
