@@ -5,7 +5,7 @@ Spork.prefork do
   ENV["RAILS_ENV"] ||= 'test'
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
-  require 'shoulda/integrations/rspec2'
+  require 'shoulda/matchers/integrations/rspec'
   require 'capybara/rspec'
   require 'capybara/rails'
 
@@ -22,4 +22,6 @@ end
 
 Spork.each_run do
   FactoryGirl.reload
+  # FIXME: kludge to fix false runtime reports when running rspec + spork (remove with rspec 2.8)
+  $rspec_start_time = Time.now
 end

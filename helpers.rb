@@ -4,14 +4,6 @@ def todo(component, message)
   append_file 'TODO', "[ ] #{message} (#{component})\n"
 end
 
-def airbrake_api_key
-  @airbrake_api_key ||= ask("What is this app's Airbrake API key (leave blank to skip)?")
-end
-
-def use_airbrake?
-  airbrake_api_key.present?
-end
-
 def use_sorcery?
   return @use_sorcery if defined?(@use_sorcery)
   @use_sorcery = yes?('Generate barebones authentication using Sorcery?')

@@ -12,6 +12,7 @@ task default: :spec
 RUBY
 
 # Rather than run spork --bootstrap, just provide a skeletal spec_helper
+remove_file 'spec/spec_helper.rb'
 file 'spec/spec_helper.rb', cat('spec/spec_helper.rb')
 
 run 'bundle exec guard init spork'
@@ -55,6 +56,11 @@ if require_ssl?
   gsub_file 'config/environments/production.rb', /# (config\.force_ssl = true)/, '\1'
 end
 
+inject_into_file 'config/environments/production.rb', <<-RUBY, after: "::Application.configure do\n"
+  # TODO: update sender/recipient addresses as needed
+  config.middleware.use ExceptionNotifier, sender_address: 'noreply@urgetopunt.com', exception_recipients: 'jparker@urgetopunt.com'
+RUBY
+
 append_file '.gitignore', <<GIT
 *.swp
 *~
@@ -72,13 +78,6 @@ remove_file 'README'
 create_file 'README', "Describe this application.\n"
 
 file '.autotest', "require 'autotest/bundler'\n"
-
-if use_airbrake?
-  generate 'airbrake', '--api-key', airbrake_api_key
-  inject_into_file 'app/views/layouts/application.html.haml', "= airbrake_javascript_notifier\n  ", before: "= csrf_meta_tag"
-else
-  todo 'airbrake', 'run the airbrake generator with the --api-key options'
-end
 
 run 'git init'
 run 'git add .'

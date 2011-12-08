@@ -1,5 +1,4 @@
-rake 'sorcery:bootstrap'
-generate 'sorcery_migration', 'core', 'remember_me'
+generate 'sorcery:install', 'remember_me'
 
 file 'spec/support/authentication_macros.rb',  cat('spec/support/authentication_macros.rb')
 file 'spec/factories/users.rb',                cat('spec/factories/users.rb')
