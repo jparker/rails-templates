@@ -64,6 +64,13 @@ config/database.yml
 webrat.log
 GIT
 
+in_root do
+  FileUtils.cp 'config/database.yml', 'config/database.example.yml'
+end
+
+remove_file 'README'
+create_file 'README', "Describe this application.\n"
+
 file '.autotest', "require 'autotest/bundler'\n"
 
 if use_airbrake?
@@ -72,3 +79,7 @@ if use_airbrake?
 else
   todo 'airbrake', 'run the airbrake generator with the --api-key options'
 end
+
+run 'git init'
+run 'git add .'
+run 'git commit -m "initial commit"'
