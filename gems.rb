@@ -21,10 +21,11 @@ gem 'haml'
 gem 'validates_existence'
 gem 'escape_utils'
 gem 'exception_notification'
+gem 'rein'
+
+gem 'sorcery' if use_sorcery?
 
 gem 'rails3-generators', group: :development
 gem 'haml-rails', group: :development
-
-gem 'sorcery' if use_sorcery?
 
 run 'bundle install'
