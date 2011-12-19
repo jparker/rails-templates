@@ -1,3 +1,4 @@
 = semantic_form_for user do |f|
   = f.inputs :username, :email, :password, :password_confirmation
-  = f.buttons
+  = f.buttons do
+    = f.commit_button button_html: {class: 'primary'}

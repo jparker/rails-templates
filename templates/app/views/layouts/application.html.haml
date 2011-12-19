@@ -5,8 +5,12 @@
   = stylesheet_link_tag 'application'
   = csrf_meta_tag
 %body
-  #head
-    %h1= yield :title
+  .topbar
+    .topbar-inner
+      .container-fluid
+        %h1= yield :title
+        = tabs
+        = subtabs
 
   #main
     #flash

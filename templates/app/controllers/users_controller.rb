@@ -13,7 +13,7 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    user.destory
+    user.destroy
     respond_with(user)
   end
 end

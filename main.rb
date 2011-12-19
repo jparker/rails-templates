@@ -40,8 +40,14 @@ apply File.join(File.dirname(__FILE__), 'sorcery.rb') if use_sorcery?
 
 generate 'formtastic:install'
 inject_into_file 'app/assets/stylesheets/application.css', " *= require formtastic\n", after: "require_self\n"
-generate 'responders:install'
+file "app/assets/stylesheets/#{app_name}.css.scss", cat('app/assets/stylesheets/application.css.scss')
+gsub_file 'config/initializers/formtastic.rb', /# (Formtastic::Helpers::FormHelper\.builder) = .*/, '\1 = FormtasticBootstrap::FormBuilder'
 
+generate 'tabs'
+gsub_file 'app/tabs/tabulous.rb', /(config.css.scaffolding) = true/, '\1 = false'
+gsub_file 'app/tabs/tabulous.rb', /(config.active_tab_clickable) = false/, '\1 = true'
+
+generate 'responders:install'
 inject_into_file 'config/locales/responders.en.yml',
   "        alert: '%{resource_name} could not be created (see errors below).'\n",
   after: "successfully created.'\n"
