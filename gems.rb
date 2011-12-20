@@ -8,6 +8,7 @@ gem 'launchy', group: :test
 gem 'spork', version: '~> 0.9.0.rc9', group: :test
 gem 'guard-rspec', group: :test
 gem 'guard-spork', group: :test
+gem 'simplecov', require: false, group: :test
 
 gem 'rein'
 gem 'haml'
