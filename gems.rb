@@ -1,5 +1,5 @@
 gem 'rspec-rails', version: '~> 2.7.0', group: [:test, :development]
-gem 'faker', group: [:test, :development]
+gem 'ffaker', group: [:test, :development]
 gem 'factory_girl_rails', group: :test
 gem 'shoulda-matchers', group: :test
 gem 'mocha', group: :test
