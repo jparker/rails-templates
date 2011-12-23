@@ -4,12 +4,12 @@ class UsersController < ApplicationController
 
   def create
     user.save
-    respond_with(user)
+    respond_with(user, flash_now: :on_failure)
   end
 
   def update
     user.save
-    respond_with(user)
+    respond_with(user, flash_now: :on_failure)
   end
 
   def destroy
