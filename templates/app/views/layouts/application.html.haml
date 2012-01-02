@@ -7,18 +7,12 @@
 %body
   .topbar
     .topbar-inner
-      .container-fluid
+      .container
         %h1= yield :title
-        = tabs
-        = subtabs
-
-  #main
-    #flash
-      - flash.each do |level, message|
-        %p{:class => level}= message
-
-    = yield
-
-  #foot
+  .container-fluid
+    .sidebar
+    .content
+      = render_flash
+      = yield
 
   = javascript_include_tag 'application'
