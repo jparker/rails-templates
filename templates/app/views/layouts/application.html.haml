@@ -12,7 +12,10 @@
   .container-fluid
     .sidebar
     .content
-      = render_flash
-      = yield
+      .row
+        = render_flash
+        = yield
+      .row
+        %p= link_to 'Sign out', sign_out_path
 
   = javascript_include_tag 'application'

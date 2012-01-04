@@ -40,7 +40,7 @@ describe 'Users' do
         fill_in 'Username', with: 'bob'
         fill_in 'Email', with: 'bob@example.com'
         fill_in 'Password', with: 'secret'
-        fill_in 'Password confirmation', with: 'secret'
+        fill_in 'Confirm password', with: 'secret'
         click_button 'Create User'
 
         user = User.find_by_username!('bob')
@@ -57,7 +57,7 @@ describe 'Users' do
         fill_in 'Username', with: 'a'
         fill_in 'Email', with: 'bogus'
         fill_in 'Password', with: ''
-        fill_in 'Password confirmation', with: ''
+        fill_in 'Confirm password', with: ''
         click_button 'Create User'
 
         page.should have_content('User could not be created (see errors below)')
@@ -98,7 +98,7 @@ describe 'Users' do
         fill_in 'Username', with: other_user.username
         fill_in 'Email', with: 'bogus'
         fill_in 'Password', with: 'frizzle'
-        fill_in 'Password confirmation', with: 'frazzle'
+        fill_in 'Confirm password', with: 'frazzle'
         click_button 'Update User'
 
         page.should have_content('User could not be updated (see errors below)')
