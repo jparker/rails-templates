@@ -43,10 +43,6 @@ remove_file 'app/assets/stylesheets/application.css'
 file "app/assets/stylesheets/application.css.scss", cat('app/assets/stylesheets/application.css.scss')
 gsub_file 'config/initializers/formtastic.rb', /# (Formtastic::Helpers::FormHelper\.builder) = .*/, '\1 = FormtasticBootstrap::FormBuilder'
 
-generate 'tabs'
-gsub_file 'app/tabs/tabulous.rb', /(config.css.scaffolding) = true/, '\1 = false'
-gsub_file 'app/tabs/tabulous.rb', /(config.active_tab_clickable) = false/, '\1 = true'
-
 generate 'responders:install'
 inject_into_file 'config/locales/responders.en.yml',
   "        alert: '%{resource_name} could not be created (see errors below).'\n",
