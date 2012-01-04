@@ -41,10 +41,8 @@ file 'app/views/layouts/application.html.haml', cat('app/views/layouts/applicati
 
 apply File.join(File.dirname(__FILE__), 'sorcery.rb') if use_sorcery?
 
-generate 'formtastic:install'
 remove_file 'app/assets/stylesheets/application.css'
 file "app/assets/stylesheets/application.css.scss", cat('app/assets/stylesheets/application.css.scss')
-gsub_file 'config/initializers/formtastic.rb', /# (Formtastic::Helpers::FormHelper\.builder) = .*/, '\1 = FormtasticBootstrap::FormBuilder'
 
 generate 'responders:install'
 inject_into_file 'config/locales/responders.en.yml',

@@ -12,8 +12,6 @@ gem 'simplecov', require: false, group: :test
 
 gem 'rein'
 gem 'haml'
-gem 'formtastic'
-gem 'formtastic-bootstrap'
 gem 'bootstrap_form_builder', git: 'git://github.com/jparker/bootstrap_form_builder.git'
 gem 'kaminari'
 gem 'decent_exposure'
