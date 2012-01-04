@@ -5,12 +5,10 @@ module ApplicationHelper
     end
   end
 
-  def render_flash
-    flash.each do |level, message|
-      klass = level == :notice ? :success : level == :alert ? :error : level
-      content_tag :div, class: ['alert-message', klass], data: {alert: 'alert'} do
-        link_to('x', '#', class: 'close') << content_tag(:p, message)
-      end
+  def render_flash(level, message)
+    klass = level == :notice ? :success : level == :alert ? :error : level
+    content_tag :div, class: ['alert-message', klass], data: {alert: 'alert'} do
+      link_to('x', '#', class: 'close') << content_tag(:p, message)
     end
   end
 

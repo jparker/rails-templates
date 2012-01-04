@@ -4,6 +4,12 @@ def todo(component, message)
   append_file 'TODO', "[ ] #{message} (#{component})\n"
 end
 
+def database_username
+  return @database_username if defined?(@database_username)
+  @database_username = ask("Enter dev DB username (#{ENV['USER']}):")
+  @database_username = ENV['USER'] if @database_username.blank?
+end
+
 def use_sorcery?
   return @use_sorcery if defined?(@use_sorcery)
   @use_sorcery = yes?('Generate barebones authentication using Sorcery?')

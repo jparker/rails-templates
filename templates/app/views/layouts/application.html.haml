@@ -13,8 +13,12 @@
     .sidebar
     .content
       .row
-        = render_flash
+        - flash.each do |level, message|
+          = render_flash level, message
+
+      .row
         = yield
+
       .row
         %p= link_to 'Sign out', sign_out_path
 

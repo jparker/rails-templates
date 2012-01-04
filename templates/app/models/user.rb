@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
 
   before_validation :normalize_username, :normalize_email
 
-  validates :username, presence: true, uniqueness: {case_sensitive: false}, length: {within: 2..32}
+  validates :username, uniqueness: {case_sensitive: false}, length: {within: 2..32}
   validates :password, presence: {on: :create}, confirmation: true, length: {minimum: 6, allow_blank: true}
   validates :email, format: { with: /\A [^@\s]+ @ (?: (?:[-a-z0-9]+\.)+ [a-z]{2,}) \Z/ix }
 

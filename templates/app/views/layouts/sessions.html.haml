@@ -10,7 +10,10 @@
       %h1= yield :title
 
     .row
-      = render_flash
+      - flash.each do |level, message|
+        = render_flash level, message
+
+    .row
       = yield
 
   = javascript_include_tag 'application'

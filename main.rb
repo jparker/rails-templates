@@ -1,6 +1,9 @@
 require File.join(File.dirname(__FILE__), 'helpers.rb')
 apply File.join(File.dirname(__FILE__), 'gems.rb')
 
+gsub_file 'config/database.yml', /username: #{app_name}$/, "username: #{database_username}"
+rake 'db:create'
+
 generate 'rspec:install'
 append_file 'Rakefile', <<RUBY
 
