@@ -1,14 +1,12 @@
-- title 'Sign in'
+- provide(:title) { 'Sign in' }
 
-= form_tag session_path, class: 'formtastic' do
-  %fieldset.inputs
-    %ol
-      %li.string.input.stringish#username_input
-        = label_tag :username, 'Username', class: 'label'
-        = text_field_tag :username
-      %li.password.input.stringish#password_input
-        = label_tag :password, 'Password', class: 'label'
-        = password_field_tag :password
-  %fieldset.buttons
-    %ol
-      %li.commit.button= submit_tag 'Sign in'
+= form_tag session_path, class: 'form-stacked' do
+  .clearfix
+    = label_tag :username, 'Username'
+    .input= text_field_tag :username
+  .clearfix
+    = label_tag :password, 'Password'
+    .input= password_field_tag :password
+  .cleafix
+    .actions
+      = submit_tag 'Sign in', class: 'btn primary'

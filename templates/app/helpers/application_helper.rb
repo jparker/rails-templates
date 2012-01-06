@@ -1,7 +1,11 @@
 module ApplicationHelper
-  def title(*crumbs)
-    provide :title do
-      crumbs.map { |str| h(str) }.join(' &raquo; ').html_safe
+  def breadcrumbs(crumbs)
+    provide(:title) { crumbs.keys.join(' / ') }
+
+    content_tag :ul, class: 'breadcrumb' do
+      crumbs.map do |text, url|
+        content_tag :li, url.present? ? link_to(h(text), url) : h(text)
+      end.join(content_tag :span, '/', class: 'divider').html_safe
     end
   end
 
