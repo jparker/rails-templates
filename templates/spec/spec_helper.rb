@@ -27,6 +27,4 @@ end
 
 Spork.each_run do
   FactoryGirl.reload
-  # FIXME: kludge to fix false runtime reports when running rspec + spork (remove with rspec 2.8)
-  $rspec_start_time = Time.now
 end
