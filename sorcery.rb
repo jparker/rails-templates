@@ -1,5 +1,10 @@
 generate 'sorcery:install', 'remember_me'
 
+generate 'migration', 'add_index_on_username_to_users'
+inject_into_file Dir['db/migrate/*_add_index_on_username_to_users.rb'].first, <<RUBY, after: "def change\n"
+    add_index :users, :username, unique: true
+RUBY
+
 file 'spec/support/authentication_macros.rb',  cat('spec/support/authentication_macros.rb')
 file 'spec/factories/users.rb',                cat('spec/factories/users.rb')
 file 'spec/models/user_spec.rb',               cat('spec/models/user_spec.rb')
