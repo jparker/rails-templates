@@ -23,7 +23,11 @@ run 'bundle exec guard init spork'
 run 'bundle exec guard init rspec'
 gsub_file 'Guardfile', /guard 'rspec'.*/, "guard 'rspec', version: 2, cli: '--drb', all_on_start: false, all_after_pass: false do\n"
 inject_into_file 'Guardfile', "require 'active_support/inflector'\n\n", before: "guard 'spork',"
-inject_into_file 'Guardfile', <<-RUBY, before: 'end'
+inject_into_file 'Guardfile', <<RUBY, after: /guard 'spork', .*do\n/
+  watch('config/routes.rb')
+  watch(%r{spec/support/}) { :rspec }
+RUBY
+inject_into_file 'Guardfile', <<RUBY, before: 'end'
   watch(%r{^spec/factories/(.+)\.rb$}) { |m| ["spec/models/\#{m[1].singularize}_spec.rb", "spec/controllers/\#{m[1]}_controller_spec.rb", "spec/requests/\#{m[1]}_spec.rb"] }
 RUBY
 
