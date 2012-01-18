@@ -20,29 +20,46 @@ module ApplicationHelper
     content_tag :span, text, class: ['label', level].compact
   end
 
-  def link_to_index(path, options = {})
-    text = options.delete(:text) || raw('&laquo; List')
-    link_to text, path, class: ['btn', 'small', 'primary'], title: 'List'
+  def menu(resource, options = {})
+    actions = [:index, :new, :show, :edit, :destroy]
+    actions &= Array.wrap(options[:only]) if options[:only]
+    actions -= Array.wrap(options[:except]) if options[:except]
+
+    content_tag :li, class: 'menu' do
+      actions.inject('') do |items, action|
+        items << content_tag(:li, send("link_to_#{action}", resource))
+      end.html_safe
+    end
   end
 
-  def link_to_show(path, options = {})
-    text = options.delete(:text) || raw('View &raquo;')
-    link_to text, path, class: ['btn', 'small', 'info'], title: 'View'
+  def link_to_index(resource, options = {})
+    text = options.delete(:text) || 'List'
+    options.reverse_merge!(title: 'List')
+    link_to text, polymorphic_path(resource.class), options
   end
 
-  def link_to_new(path, options = {})
-    text = options.delete(:text) || raw('New &raquo;')
-    link_to text, path, class: ['btn', 'small', 'success'], title: 'New'
+  def link_to_show(resource, options = {})
+    text = options.delete(:text) || 'View'
+    options.reverse_merge!(title: 'View')
+    link_to text, polymorphic_path(resource), options
   end
 
-  def link_to_edit(path, options = {})
-    text = options.delete(:text) || raw('Edit &rqauo;')
-    link_to text, path, class: ['btn', 'small'], title: 'Edit'
+  def link_to_new(resource, options = {})
+    text = options.delete(:text) || 'New'
+    options.reverse_merge!(title: 'New')
+    link_to text, new_polymorphic_path(resource), options
   end
 
-  def link_to_destroy(path, options = {})
-    text = options.delete(:text) || raw('Delete &raquo;')
-    link_to text, path, class: ['btn', 'small', 'danger'], title: 'Delete', method: :delete, confirm: 'Are you sure?'
+  def link_to_edit(resource, options = {})
+    text = options.delete(:text) || 'Edit'
+    options.reverse_merge!(title: 'Edit')
+    link_to text, edit_polymorphic_path(resource), options
+  end
+
+  def link_to_destroy(resource, options = {})
+    text = options.delete(:text) || 'Delete'
+    options.reverse_merge!(title: 'Delete', method: :delete, confirm: 'Are you sure?')
+    link_to text, polymorphic_path(resource), options
   end
 
   def google_analytics(app_id)
