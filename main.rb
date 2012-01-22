@@ -30,6 +30,7 @@ RUBY
 inject_into_file 'Guardfile', <<RUBY, before: 'end'
   watch(%r{^spec/factories/(.+)\.rb$}) { |m| ["spec/models/\#{m[1].singularize}_spec.rb", "spec/controllers/\#{m[1]}_controller_spec.rb", "spec/requests/\#{m[1]}_spec.rb"] }
 RUBY
+gsub_file 'Guardfile', 'acceptance', 'requests'
 
 apply File.join(File.dirname(__FILE__), 'urgetopunt.rb')
 
