@@ -4,6 +4,7 @@ gem 'factory_girl_rails', group: :test
 gem 'shoulda-matchers', group: :test
 gem 'mocha', group: :test
 gem 'capybara', group: :test
+gem 'capybara-webkit', group: :test
 gem 'launchy', group: :test
 gem 'spork', version: '~> 0.9.0.rc9', group: :test
 gem 'guard-rspec', group: :test

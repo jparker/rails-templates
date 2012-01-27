@@ -18,6 +18,7 @@ RUBY
 # Rather than run spork --bootstrap, just provide a skeletal spec_helper
 remove_file 'spec/spec_helper.rb'
 file 'spec/spec_helper.rb', cat('spec/spec_helper.rb')
+file 'spec/support/shared_connection.rb', cat('spec/support/shared_connection.rb')
 
 run 'bundle exec guard init spork'
 run 'bundle exec guard init rspec'
