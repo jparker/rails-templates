@@ -35,9 +35,13 @@ gsub_file 'Guardfile', 'acceptance', 'requests'
 
 apply File.join(File.dirname(__FILE__), 'urgetopunt.rb')
 
-inject_into_file 'config/application.rb',
-  "    config.active_record.schema_format = :sql\n\n",
-  after: "class Application < Rails::Application\n"
+inject_into_file 'config/application.rb', <<-RUBY, after: "class Application < Rails::Application\n"
+    # Use raw SQL schema format - default ruby version doesn't support advanced db features
+    config.active_record.schema_format = :sql
+
+    # Don't initialize on assets:precompile (needed when deploying to Heroku)
+    config.assets.initialize_on_precompile = false
+RUBY
 gsub_file 'config/application.rb', /# config\.autoload_paths \+= .*/, 'config.autoload_paths += %W(#{config.root}/lib)'
 inject_into_file 'config/application.rb', "  Bundler.require(:darwin) if RUBY_PLATFORM.match(/darwin/i)\n", after: "if defined?(Bundler)\n"
 
