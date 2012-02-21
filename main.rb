@@ -57,7 +57,7 @@ apply File.join(File.dirname(__FILE__), 'sorcery.rb') if use_sorcery?
 remove_file 'app/assets/stylesheets/application.css'
 file "app/assets/stylesheets/application.css.scss", cat('app/assets/stylesheets/application.css.scss')
 
-inject_into_file 'app/assets/javascripts/application.js', "//= require bootstrap-alerts\n", before: '//= require_tree .'
+inject_into_file 'app/assets/javascripts/application.js', "//= require bootstrap-alert\n", before: '//= require_tree .'
 
 generate 'responders:install'
 inject_into_file 'config/locales/responders.en.yml',
@@ -99,4 +99,4 @@ file '.autotest', "require 'autotest/bundler'\n"
 
 git :init
 git add: '.'
-git commit: '-m initial commit'
+git commit: '-m "initial commit"'

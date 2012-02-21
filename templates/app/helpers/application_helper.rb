@@ -10,56 +10,70 @@ module ApplicationHelper
   end
 
   def render_flash(level, message)
-    klass = level == :notice ? :success : level == :alert ? :error : level
-    content_tag :div, class: ['alert-message', klass], data: {alert: 'alert'} do
-      link_to('x', '#', class: 'close') << content_tag(:p, message)
+    klass = case level
+            when :notice then 'alert-success'
+            when :alert  then 'alert-error'
+            when /.+/    then "alert-#{level}"
+            else              nil
+            end
+    content_tag :div, class: ['alert', klass].compact, data: { dismiss: 'alert' } do
+      link_to('X', '#', class: 'close') << content_tag(:p, message)
     end
   end
 
   def flag(text, level = nil)
-    content_tag :span, text, class: ['label', level].compact
+    content_tag :span, text, class: ['label', "label-#{level}"].compact
   end
 
   def menu(resource, options = {})
-    actions = [:index, :new, :show, :edit, :destroy]
+    actions  = [:index, :new, :show, :edit, :destroy]
     actions &= Array.wrap(options[:only]) if options[:only]
     actions -= Array.wrap(options[:except]) if options[:except]
+    extras   = Array.wrap(options[:extras])
 
-    content_tag :li, class: 'menu' do
-      actions.inject('') do |items, action|
-        items << content_tag(:li, send("link_to_#{action}", resource))
-      end.html_safe
+    items = actions.inject('') do |content, action|
+      content << content_tag(:li, send("link_to_#{action}", resource))
     end
+    items = extras.inject(items) do |content, item|
+      content << content_tag(:li, item)
+    end
+
+    content_tag :ul, items.html_safe, class: 'menu'
   end
 
   def link_to_index(resource, options = {})
-    text = options.delete(:text) || 'List'
-    options.reverse_merge!(title: 'List')
-    link_to text, polymorphic_path(resource.class), options
+    text = options.delete(:text) || 'All'
+    path = options.delete(:path) || polymorphic_path(resource.is_a?(Class) ? resource : resource.class)
+    options.reverse_merge!(title: 'All')
+    link_to text, path, options
   end
 
   def link_to_show(resource, options = {})
     text = options.delete(:text) || 'View'
+    path = options.delete(:path) || polymorphic_path(resource)
     options.reverse_merge!(title: 'View')
-    link_to text, polymorphic_path(resource), options
+    link_to text, path, options
   end
 
   def link_to_new(resource, options = {})
     text = options.delete(:text) || 'New'
+    path = options.delete(:path) || new_polymorphic_path(resource)
     options.reverse_merge!(title: 'New')
-    link_to text, new_polymorphic_path(resource), options
+    link_to text, path, options
   end
 
   def link_to_edit(resource, options = {})
     text = options.delete(:text) || 'Edit'
+    path = options.delete(:path) || edit_polymorphic_path(resource)
     options.reverse_merge!(title: 'Edit')
-    link_to text, edit_polymorphic_path(resource), options
+    link_to text, path, options
   end
 
   def link_to_destroy(resource, options = {})
     text = options.delete(:text) || 'Delete'
+    path = options.delete(:path) || polymorphic_path(resource)
     options.reverse_merge!(title: 'Delete', method: :delete, confirm: 'Are you sure?')
-    link_to text, polymorphic_path(resource), options
+    link_to text, path, options
   end
 
   def google_analytics(app_id)

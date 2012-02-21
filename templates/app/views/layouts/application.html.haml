@@ -5,12 +5,11 @@
   = stylesheet_link_tag 'application'
   = csrf_meta_tag
 %body
-  .topbar
-    .topbar-inner
+  .navbar
+    .navbar-inner
       .container
         %h1= yield :title
-  .container-fluid
-    .sidebar
+  .container
     .content
       .row
         - flash.each do |level, message|
