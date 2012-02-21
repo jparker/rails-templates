@@ -59,6 +59,8 @@ file "app/assets/stylesheets/application.css.scss", cat('app/assets/stylesheets/
 
 inject_into_file 'app/assets/javascripts/application.js', "//= require bootstrap-alert\n", before: '//= require_tree .'
 
+generate 'simple_form:install', '--bootstrap'
+
 generate 'responders:install'
 inject_into_file 'config/locales/responders.en.yml',
   "        alert: '%{resource_name} could not be created (see errors below).'\n",

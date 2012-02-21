@@ -6,18 +6,18 @@ describe 'Sessions' do
   describe 'signing in' do
     it 'redirects to home page on success' do
       visit sign_in_path
-      fill_in 'Username', with: 'bob'
-      fill_in 'Password', with: 'secret'
-      click_button 'Sign in'
+      fill_in 'username', with: 'bob'
+      fill_in 'password', with: 'secret'
+      click_button 'Sign In'
       current_path.should == root_path
       page.should have_content('You are now signed in')
     end
 
     it 're-renders the sign in form after failure' do
       visit sign_in_path
-      fill_in 'Username', with: 'bob'
-      fill_in 'Password', with: 'bogus'
-      click_button 'Sign in'
+      fill_in 'username', with: 'bob'
+      fill_in 'password', with: 'bogus'
+      click_button 'Sign In'
       current_path.should == session_path
       page.should have_content('The username or password you entered was invalid')
       page.should have_css('input#username')

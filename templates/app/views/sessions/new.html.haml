@@ -1,12 +1,5 @@
-- provide(:title) { 'Sign in' }
-
-= form_tag session_path, class: 'form-stacked' do
-  .clearfix
-    = label_tag :username, 'Username'
-    .input= text_field_tag :username
-  .clearfix
-    = label_tag :password, 'Password'
-    .input= password_field_tag :password
-  .cleafix
-    .actions
-      = submit_tag 'Sign in', class: 'btn primary'
+= form_tag session_path, class: 'well form-inline' do
+  %legend Please sign in...
+  = text_field_tag :username, nil, placeholder: 'Username', class: 'input-small'
+  = password_field_tag :password, nil, placeholder: 'Password', class: 'input-small'
+  %button{ type: :submit, class: 'btn' } Sign In

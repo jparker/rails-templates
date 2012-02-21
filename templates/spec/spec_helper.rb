@@ -21,7 +21,7 @@ Spork.prefork do
   Capybara.javascript_driver = :webkit
 
   RSpec.configure do |config|
-    config.include Factory::Syntax::Methods
+    config.include FactoryGirl::Syntax::Methods
     config.mock_with :mocha
     config.use_transactional_fixtures = true
 

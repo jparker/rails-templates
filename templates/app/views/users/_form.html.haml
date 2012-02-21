@@ -1,6 +1,6 @@
-= bootstrap_form_for user do |form|
-  = form.text_field :username
-  = form.text_field :email
-  = form.password_field :password
-  = form.password_field :password_confirmation, label: 'Confirm password'
-  = form.submit nil, class: 'primary'
+= simple_form_for user do |form|
+  = form.input :username
+  = form.input :email
+  = form.input :password
+  = form.input :password_confirmation, label: 'Confirm password'
+  = form.button :submit, class: 'btn-primary'
