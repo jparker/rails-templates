@@ -15,6 +15,8 @@ task(:default).clear
 task default: :spec
 RUBY
 
+file 'lib/tasks/annotate.rake', cat('lib/tasks/annotate.rake')
+
 # Rather than run spork --bootstrap, just provide a skeletal spec_helper
 remove_file 'spec/spec_helper.rb'
 file 'spec/spec_helper.rb', cat('spec/spec_helper.rb')
