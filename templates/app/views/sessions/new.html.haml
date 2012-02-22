@@ -1,5 +1,5 @@
 = form_tag session_path, class: 'well form-inline' do
-  %legend Please sign in...
+  %legend Please sign in &hellip;
   = text_field_tag :username, nil, placeholder: 'Username', class: 'input-small'
   = password_field_tag :password, nil, placeholder: 'Password', class: 'input-small'
   %button{ type: :submit, class: 'btn' } Sign In
