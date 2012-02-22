@@ -50,7 +50,7 @@ inject_into_file 'config/application.rb', "  Bundler.require(:darwin) if RUBY_PL
 gsub_file 'config/environments/test.rb', /# (config.active_record.schema_format = :sql)/, '\1'
 
 remove_file 'app/views/layouts/application.html.erb'
-file 'app/views/layouts/application.html.haml', cat('app/views/layouts/application.html.haml')
+file 'app/views/layouts/application.html.haml', erb('app/views/layouts/application.html.haml')
 
 apply File.join(File.dirname(__FILE__), 'sorcery.rb') if use_sorcery?
 

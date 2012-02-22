@@ -8,7 +8,7 @@
   .navbar
     .navbar-inner
       .container
-        %h1= yield :title
+        = link_to '<%= app_name %>', root_path, class: 'brand'
   .container
     .content
       .row

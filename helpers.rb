@@ -30,5 +30,5 @@ def cat(filename)
 end
 
 def erb(filename)
-  ERB.new(cat(filename)).result
+  ERB.new(cat(filename)).result(binding)
 end

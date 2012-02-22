@@ -5,10 +5,11 @@
   = stylesheet_link_tag 'application'
   = csrf_meta_tag
 %body
+  .navbar
+    .navbar-inner
+      .container
+        = link_to '<%= app_name %>', root_path, class: 'brand'
   .container
-    .row
-      %h1= yield :title
-
     .row
       - flash.each do |level, message|
         = render_flash level, message
