@@ -72,7 +72,7 @@ module ApplicationHelper
   def link_to_destroy(resource, options = {})
     text = options.delete(:text) || 'Delete'
     path = options.delete(:path) || polymorphic_path(resource)
-    options.reverse_merge!(title: 'Delete', method: :delete, confirm: 'Are you sure?')
+    options.reverse_merge!(title: 'Delete', method: :delete, data: { confirm: 'Are you sure?' })
     link_to text, path, options
   end
 

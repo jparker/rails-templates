@@ -57,11 +57,11 @@ describe ApplicationHelper do
     let(:user) { build_stubbed(:user) }
 
     it 'links to #destroy action for given resource' do
-      helper.link_to_destroy(user).should eq(helper.link_to('Delete', helper.user_path(user), title: 'Delete', method: :delete, confirm: 'Are you sure?'))
+      helper.link_to_destroy(user).should eq(helper.link_to('Delete', helper.user_path(user), title: 'Delete', method: :delete, data: { confirm: 'Are you sure?' }))
     end
 
     it 'accepts a path option to override link target' do
-      helper.link_to_destroy(user, path: '/foo').should eq(helper.link_to('Delete', '/foo', title: 'Delete', method: :delete, confirm: 'Are you sure?'))
+      helper.link_to_destroy(user, path: '/foo').should eq(helper.link_to('Delete', '/foo', title: 'Delete', method: :delete, data: { confirm: 'Are you sure?' }))
     end
   end
 end
