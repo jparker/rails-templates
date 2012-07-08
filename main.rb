@@ -5,7 +5,7 @@ gsub_file 'config/database.yml', /username: #{app_name}$/, "username: #{database
 rake 'db:create'
 
 generate 'rspec:install'
-append_file '.rspec', "--order random\n--tag focus\n"
+append_file '.rspec', "--tag focus\n"
 append_file 'Rakefile', <<RUBY
 
 # On Rails 3.1 the default task is "test" even after running rspec:install. Removing
