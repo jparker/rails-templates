@@ -2,12 +2,12 @@ require 'spec_helper'
 
 describe 'Users' do
   describe 'listing users' do
-    let!(:users) { create_list(:user, 5) }
+    let!(:users) { create_list(:user, 5).sort_by(&:username) }
 
     it 'lists users' do
       visit users_path
-      users.each do |user|
-        page.should have_selector('tbody tr.user td', text: user.username)
+      (1...users.size).each do |i|
+        users[i-1].username.should appear_before(users[i].username)
       end
     end
 

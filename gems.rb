@@ -5,6 +5,7 @@ gem 'shoulda-matchers', group: :test
 gem 'mocha', group: :test
 gem 'capybara', group: :test
 gem 'capybara-webkit', group: :test
+gem 'orderly', group: :test
 gem 'launchy', group: :test
 gem 'spork', group: :test
 gem 'guard-rspec', group: :test
