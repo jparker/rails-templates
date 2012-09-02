@@ -25,7 +25,7 @@ Spork.prefork do
     config.include FactoryGirl::Syntax::Methods
 
     config.mock_with :mocha
-    config.use_transactional_fixtures = true
+    config.use_transactional_fixtures = false
     config.infer_base_class_for_anonymous_controllers = false
     config.order = 'random'
 
@@ -37,5 +37,4 @@ end
 
 Spork.each_run do
   FactoryGirl.reload
-  ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
 end
