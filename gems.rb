@@ -1,4 +1,4 @@
-gem 'rspec-rails', version: '~> 2.8.1', group: [:test, :development]
+gem 'rspec-rails', version: '~> 2.11.0', group: [:test, :development]
 gem 'ffaker', group: [:test, :development]
 gem 'factory_girl_rails', group: :test
 gem 'shoulda-matchers', group: :test
@@ -16,7 +16,7 @@ gem 'rein'
 gem 'haml'
 gem 'haml-rails'
 gem 'kaminari'
-gem 'simple_form', '~> 2.0.0.rc'
+gem 'simple_form'
 gem 'decent_exposure'
 gem 'responders'
 gem 'validates_existence'
